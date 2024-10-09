@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('data', function (Blueprint $table) {
+        Schema::create('chart_data', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->float('total_remittance');
+            $table->date('date');
         });
     }
 
@@ -22,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('data');
+        Schema::dropIfExists('chart_data');
     }
 };
