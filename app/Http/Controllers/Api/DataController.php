@@ -32,12 +32,4 @@ class DataController extends Controller
             // 'data' => $data
         ]);
     }
-    public function index()
-    {
-        // $data['datas'] = Data::all();
-        // return view('dashboard.index', $data);
-        $chart = ChartData::all();
-        return view('dashboard.index', ['chart' => $chart]);
-    }
-
 }
