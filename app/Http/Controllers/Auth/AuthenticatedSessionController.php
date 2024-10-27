@@ -28,7 +28,19 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        $url = "dashboard";
+
+        if ($request->user()->role === "admin") {
+            $url = "admin/dashboard";
+        } else if($request->user()->role === "kuwago_one"){
+            $url = "kuwago_one/dashboard";
+        } else if($request->user()->role === "kuwago_two"){
+            $url = "kuwago_two/dashboard";
+        } else if($request->user()->role === "uddesign"){
+            $url = "uddesign/dashboard";
+        }
+
+        return redirect()->intended($url);
     }
 
     /**
