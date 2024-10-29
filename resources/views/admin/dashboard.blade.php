@@ -32,7 +32,7 @@
         <link href="{{ url('assets/css/bootstrap.min.css') }}" rel="stylesheet" />
         <script src="{{ url('assets/js/bootstrap.bundle.min.js') }}"></script>
         {{-- END OF BOOTSTRAP --}} {{-- FONT AWESOME --}}
-        <link rel="stylesheet" href="{{url('fontawesome-free-6.6.0-web/css/all.min.css')}}" />
+        <link rel="stylesheet" href="{{url('fontawesome/css/all.min.css')}}" />
         {{-- END OF FONT AWESOME --}}
     </head>
     <body>
