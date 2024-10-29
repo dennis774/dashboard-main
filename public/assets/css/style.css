@@ -1,0 +1,76 @@
+div.top-bar {
+    padding:5px ; 
+    background: rgba(255, 255, 255, 0.1) ;
+    border-radius: 100px ; 
+    backdrop-filter: blur(10px) ;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) ;
+}
+
+div.side-bar {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 40px;
+    transition: width 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+div.contents {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+div.card-box {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    color: white;
+}
+
+div.footer {
+background: rgba(255, 255, 255, 0.2);
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+backdrop-filter: blur(10px);
+border-radius: 40px;
+}
+
+
+
+.modal-bg {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #333;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 100%;
+    color: #fff; /* Change text color to white */
+}
+
+.modal-content h5 {
+    margin-bottom: 20px;
+}
+
+.modal-content .form-label {
+    color: #fff; /* Make the label color white */
+}
+
+.modal-content input[type="date"] {
+    color: #000; /* Set input text color to black for visibility */
+}

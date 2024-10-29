@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChartDataController;
 use App\Http\Controllers\RoleController;
+use App\Models\ChartData;
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,7 +24,9 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:admin'])->group(function(){
     Route::get('/admin/dashboard', [RoleController::class, 'admin_dashboard'])->name('admin.dashboard');
     Route::resource('/admin/account', AccountController::class);
-    Route::resource('dashboard-main', ChartDataController::class);
+    // Route::resource('dashboard-main', ChartDataController::class);
+    Route::get('/admin/dashboard', [ChartDataController::class, 'index'])->name('admin.dashboard');
+
 });
 
 Route::middleware(['auth', 'role:kuwago_one'])->group(function () {

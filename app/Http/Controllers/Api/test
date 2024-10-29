@@ -1,0 +1,67 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Models\ChartData;
+use GuzzleHttp\Client;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+class DataController extends Controller
+{
+    public function refreshData(Request $request) {
+
+        $my_token = $request->
+
+        // upon successful login, store user token in session
+        session()->store('username', 'dennis');
+
+        $my_token = session()->get('username');
+
+        // check & validate user token system nyo
+        if (empty($my_token)) {
+            return response()->json([
+                'status' => false,
+                'error' => 'Please provide user token.'
+            ]);
+        }
+
+        // check if token matches on the system nyo
+        if (!User::where('token', $user_token)->first()) {
+            return response()->json([
+                'status' => false,
+                'error' => 'Invalid user token.'
+            ]);
+        }
+
+        // fetch token of kuwago
+        $client2 = new Client();
+        $token_response = $client2->request('GET', env('MY_API_URL', '').'/api/token', [ 'username' => env('DATA_REFRESH_USERNAME'), 'password' => env('DATA_REFRESH_PASSWORD') ]);
+        $user_token = json_decode($token_response->getBody()->getContents());
+        
+
+
+        // fetch data using token
+        $client = new Client();
+        $response = $client->request('GET', env('MY_API_URL', '').'/api/data', [ 'token' => $user_token ]);
+        $body_contents = json_decode($response->getBody()->getContents());
+        // dd($body_contents);
+
+        ChartData::truncate();
+        $array_of_data = [];
+
+        foreach ($body_contents->data as $content) {
+            // dd($content);
+            array_push($array_of_data, [
+                'total_remittance' => $content->total_remittance,
+                'date' => $content->date,
+            ]);
+        }
+        ChartData::insert($array_of_data);
+
+        return response()->json([
+            'succesful' => true,
+            // 'data' => $data
+        ]);
+    }
+}
