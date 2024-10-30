@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\BusinessInfoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChartDataController;
@@ -40,5 +41,9 @@ Route::middleware(['auth', 'role:kuwago_two'])->group(function () {
 Route::middleware(['auth', 'role:uddesign'])->group(function () {
     Route::get('/uddesign/dashboard', [RoleController::class, 'uddesign_dashboard'])->name('uddesign.dashboard');
 });
+
+// Route::get('/business', [BusinessInfoController::class, 'index'])->name('business_info.index');
+// Route::patch('/business', [BusinessInfoController::class, 'update'])->name('business_info.update');
+Route::resource('/business', BusinessInfoController::class);
 
 require __DIR__.'/auth.php';
