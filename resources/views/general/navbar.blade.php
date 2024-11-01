@@ -29,7 +29,7 @@
                     <div class="col-lg-4">
                         <div>
                             <a href="#" class="mx-2"><i class="fa-solid fa-store"></i></a>
-                            <a href="{{route('profile.edit')}}" class="mx-2"><i class="fa-solid fa-user"></i></a>
+                            <a href="{{url('/admin/account')}}" class="mx-2"><i class="fa-solid fa-user"></i></a>
                             <a href="#" class="mx-2"><i class="fa-solid fa-gear"></i></a>
                             @if (Auth::check())
                             <a href="{{ route('logout') }}" class="mx-2" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

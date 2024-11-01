@@ -42,8 +42,6 @@ Route::middleware(['auth', 'role:uddesign'])->group(function () {
     Route::get('/uddesign/dashboard', [RoleController::class, 'uddesign_dashboard'])->name('uddesign.dashboard');
 });
 
-// Route::get('/business', [BusinessInfoController::class, 'index'])->name('business_info.index');
-// Route::patch('/business', [BusinessInfoController::class, 'update'])->name('business_info.update');
 Route::resource('/business', BusinessInfoController::class);
 
 require __DIR__.'/auth.php';

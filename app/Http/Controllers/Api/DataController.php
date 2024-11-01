@@ -21,6 +21,8 @@ class DataController extends Controller
         foreach ($body_contents->data as $content) {
             // dd($content);
             array_push($array_of_data, [
+                'cash' => $content->cash,
+                'gcash' => $content->gcash,
                 'total_remittance' => $content->total_remittance,
                 'date' => $content->date,
             ]);

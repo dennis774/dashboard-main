@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('chart_data', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->float('cash')->nullable();
+            $table->float('gcash')->nullable();
             $table->float('total_remittance');
             $table->date('date');
         });

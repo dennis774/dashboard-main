@@ -18,9 +18,6 @@ class BusinessInfoController extends Controller
         return view('business_info.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -33,26 +30,19 @@ class BusinessInfoController extends Controller
             'description' => 'required|string',
         ]);
         if ($request->hasFile('business_image')) {
-            $fileName = time().$request->file('business_image')->getClientOriginalName();
+            $fileName = time() . $request->file('business_image')->getClientOriginalName();
             $request->file('business_image')->move(public_path('images'), $fileName);
-            $validatedData['business_image'] = $fileName; 
+            $validatedData['business_image'] = $fileName;
         }
         if ($request->hasFile('business_logo')) {
-            $fileName = time().$request->file('business_logo')->getClientOriginalName();
+            $fileName = time() . $request->file('business_logo')->getClientOriginalName();
             $request->file('business_logo')->move(public_path('logos'), $fileName);
-            $validatedData['business_logo'] = $fileName; 
+            $validatedData['business_logo'] = $fileName;
         }
-        // BusinessInfo::create([
-        //     'business_image' => $request->business_image,
-        //     'business_logo' => $request->business_logo,
-        //     'business_name' => $request->business_name,
-        //     'year' => $request->year,
-        //     'business_type' => $request->business_type,
-        //     'location' => $request->location,
-        //     'description' => $request->description,
-        // ]);
         BusinessInfo::create($validatedData);
-        return redirect()->to('/business')->with('success', 'User created successfully.');
+        return redirect()
+            ->to('/business')
+            ->with('success', 'User created successfully.');
     }
 
     public function edit(string $id)
@@ -74,34 +64,28 @@ class BusinessInfoController extends Controller
             'description' => 'required|string',
         ]);
         if ($request->hasFile('business_image')) {
-            $fileName = time().$request->file('business_image')->getClientOriginalName();
+            $fileName = time() . $request->file('business_image')->getClientOriginalName();
             $request->file('business_image')->move(public_path('images'), $fileName);
-            $validatedData['business_image'] = $fileName; 
+            $validatedData['business_image'] = $fileName;
         }
         if ($request->hasFile('business_logo')) {
-            $fileName = time().$request->file('business_logo')->getClientOriginalName();
+            $fileName = time() . $request->file('business_logo')->getClientOriginalName();
             $request->file('business_logo')->move(public_path('logos'), $fileName);
-            $validatedData['business_logo'] = $fileName; 
+            $validatedData['business_logo'] = $fileName;
         }
-        // $data->update([
-        //     'business_image' => $request->business_image,
-        //     'business_logo' => $request->business_logo,
-        //     'business_name' => $request->business_name,
-        //     'year' => $request->year,
-        //     'business_type' => $request->business_type,
-        //     'location' => $request->location,
-        //     'description' => $request->description,
-        // ]);
-        $data->update( $validatedData);
-        
-        return redirect()->to('/business')->with('success', 'User updated successfully.');
+        $data->update($validatedData);
+
+        return redirect()
+            ->to('/business')
+            ->with('success', 'User updated successfully.');
     }
 
     public function destroy(string $id)
     {
         $data = BusinessInfo::find($id);
         $data->delete();
-        return redirect()->to('/business')->with('success', 'User updated successfully.');
-        
+        return redirect()
+            ->to('/business')
+            ->with('success', 'User updated successfully.');
     }
 }
