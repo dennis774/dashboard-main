@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BusinessInfo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BusinessInfoController extends Controller
 {
@@ -73,6 +74,7 @@ class BusinessInfoController extends Controller
             $request->file('business_logo')->move(public_path('logos'), $fileName);
             $validatedData['business_logo'] = $fileName;
         }
+        
         $data->update($validatedData);
 
         return redirect()
@@ -83,6 +85,15 @@ class BusinessInfoController extends Controller
     public function destroy(string $id)
     {
         $data = BusinessInfo::find($id);
+        // Delete the business image if it exists
+    if ($data->business_image) {
+        Storage::delete('public/images/' . $data->business_image);
+    }
+
+    // Delete the business logo if it exists
+    if ($data->business_logo) {
+        Storage::delete('public/logos/' . $data->business_logo);
+    }
         $data->delete();
         return redirect()
             ->to('/business')

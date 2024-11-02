@@ -2,12 +2,12 @@
 
 @section('content')
 
-@include('admin.content')
+@include('roles.admin.content')
 
 @endsection
 
 @section('scripts')
 
-@include('admin.bar_chart')
+@include('roles.admin.bar_chart')
 
 @endsection

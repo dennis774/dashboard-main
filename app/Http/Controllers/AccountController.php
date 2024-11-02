@@ -17,7 +17,7 @@ class AccountController extends Controller
         // return view('admin.account.index', compact('users'));
 
         $data['users'] = User::all();
-        return view('admin.account.index', $data);
+        return view('roles.admin.account.index', $data);
     }
 
     /**
@@ -25,7 +25,7 @@ class AccountController extends Controller
      */
     public function create()
     {
-        return view('admin.account.create');
+        return view('roles.admin.account.create');
     }
 
     /**
@@ -63,7 +63,7 @@ class AccountController extends Controller
     public function edit(string $id)
     {
         $user = User::findOrFail($id);
-        return view('admin.account.edit', compact('user'));
+        return view('roles.admin.account.edit', compact('user'));
     }
 
     /**

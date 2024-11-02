@@ -1,37 +1,16 @@
     {{-- START --}}
     <div class="container text-center">
-        <div class="row border-danger border border-2 mb-5">
+        <div class="row mb-5">
             {{-- START OF SIDE BAR --}}
-            <div class="col-lg-2">
+            <div class="col-lg-1">
                 <div class="container">
                     <div class="row">
-                        <div class="col-lg-12 side-bar">
-                            <ul class="nav flex-column">
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link {{ request()->routeIs('#') ? 'active' : '' }}"> <i class="fa-solid fa-border-all"></i><span>General</span> </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link {{ request()->routeIs('#') ? 'active' : '' }}"> <i class="fa-solid fa-chart-line"></i><span>Sales</span> </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link {{ request()->routeIs('#') ? 'active' : '' }}"> <i class="fa-solid fa-wallet"></i><span>Expenses</span> </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link {{ request()->routeIs('#') ? 'active' : '' }}"> <i class="fa-solid fa-tags"></i><span>Promos</span> </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link {{ request()->routeIs('#') ? 'active' : '' }}"> <i class="fa-solid fa-star"></i><span>Feedbacks</span> </a>
-                                </li>
-                            </ul>
-                            <button id="toggleSidebar" class="btn btn-light btn-sm mt-3">
-                                <i class="fa-solid fa-bars"></i>
-                            </button>
-                        </div>
+                        @include('general.sidebar')
                     </div>
                 </div>
             </div>
             {{-- END OF SIDE BAR --}} {{-- START OF CONTENTS--}}
-            <div class="col-lg-10 border-black border p-3 contents">
+            <div class="col-lg-11 p-3 contents">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-6">
@@ -74,7 +53,7 @@
                                             <button type="submit">Filter</button>
                                         </form>
                                         
-                                        <canvas id="myChart" width="400" height="400"></canvas>
+                                        <canvas id="myChart" width="400" height="200"></canvas>
                                     </div>
 
                                     <div class="col-lg-12">

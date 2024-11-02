@@ -2,11 +2,11 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-2"></div>
-        <div class="col-lg-8 border-black border top-bar">
+        <div class="col-lg-8 top-bar">
             <div style="container">
                 <div class="row">
                     <div class="col-lg-4">
-                        <img src="#" class="user-image" />
+                        <img src="https://via.placeholder.com/80" class="user-image" />
                         <span>Welcome, {{ Auth::user()->name }}!</span>
                     </div>
 
@@ -28,7 +28,7 @@
 
                     <div class="col-lg-4">
                         <div>
-                            <a href="#" class="mx-2"><i class="fa-solid fa-store"></i></a>
+                            <a href="{{url('/admin/business')}}" class="mx-2"><i class="fa-solid fa-store"></i></a>
                             <a href="{{url('/admin/account')}}" class="mx-2"><i class="fa-solid fa-user"></i></a>
                             <a href="#" class="mx-2"><i class="fa-solid fa-gear"></i></a>
                             @if (Auth::check())

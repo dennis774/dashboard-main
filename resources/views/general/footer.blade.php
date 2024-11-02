@@ -3,7 +3,7 @@
         <div class="col-lg-4">
             <button onclick="generatePDF()" class="btn btn-outline-light">Generate PDF</button>
         </div>
-        <div class="col-lg-6 border-black border">
+        <div class="col-lg-6">
             <div class="dropdown">
                 <select id="dateFilter" onchange="handleFilterChange()" class="dropdownforModal">
                     <option value="today">Today</option>
@@ -22,7 +22,7 @@
                 </select>
             </div>
         </div>
-        <div class="col-lg-2 border-black border">
+        <div class="col-lg-2">
             <i class="fas fa-filter filter-icon" onclick="updateChartWithFilter()"></i>
         </div>
     </div>

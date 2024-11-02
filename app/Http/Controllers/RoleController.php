@@ -8,20 +8,20 @@ class RoleController extends Controller
 {
     public function admin_dashboard()
     {
-        return view('admin.dashboard');
+        return view('roles.admin.dashboard');
     }
 
-    public function kuwago_one_dashboard()
+    public function general_dashboard()
     {
-        return view('kuwago_one.dashboard');
+        return view('roles.general.dashboard');
     }
 
-    public function kuwago_two_dashboard()
+    public function kuwago_dashboard()
     {
-        return view('kuwago_two.dashboard');
+        return view('roles.kuwago.dashboard');
     }
     public function uddesign_dashboard()
     {
-        return view('uddesign.dashboard');
+        return view('roles.uddesign.dashboard');
     }
 }

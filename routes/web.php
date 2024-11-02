@@ -5,11 +5,11 @@ use App\Http\Controllers\BusinessInfoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChartDataController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\RoleController;
-use App\Models\ChartData;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::get('/dashboard', function () {
@@ -22,26 +22,31 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth', 'role:admin'])->group(function(){
+Route::middleware(['auth', 'role:owner'])->group(function(){
     Route::get('/admin/dashboard', [RoleController::class, 'admin_dashboard'])->name('admin.dashboard');
     Route::resource('/admin/account', AccountController::class);
-    // Route::resource('dashboard-main', ChartDataController::class);
     Route::get('/admin/dashboard', [ChartDataController::class, 'index'])->name('admin.dashboard');
 
+    Route::get('/admin/expenses', [PageController::class, 'expenses_index'])->name('pages.Expenses.index');
+    Route::get('/admin/feedbacks', [PageController::class, 'feedback_index'])->name('pages.Feedbacks.index');
+    Route::get('/admin/promos', [PageController::class, 'promo_index'])->name('pages.Promos.index');
+    Route::get('/admin/sales', [PageController::class, 'sales_index'])->name('pages.Sales.index');
+
+    Route::resource('/admin/business', BusinessInfoController::class);
+
 });
 
-Route::middleware(['auth', 'role:kuwago_one'])->group(function () {
-    Route::get('/kuwago_one/dashboard', [RoleController::class, 'kuwago_one_dashboard'])->name('kuwago_one.dashboard');
+Route::middleware(['auth', 'role:general'])->group(function () {
+    Route::get('/general/dashboard', [RoleController::class, 'general_dashboard'])->name('generaldashboard.dashboard');
 });
 
-Route::middleware(['auth', 'role:kuwago_two'])->group(function () {
-    Route::get('/kuwago_two/dashboard', [RoleController::class, 'kuwago_two_dashboard'])->name('kuwago_two.dashboard');
+Route::middleware(['auth', 'role:kuwago'])->group(function () {
+    Route::get('/kuwago/dashboard', [RoleController::class, 'kuwago_dashboard'])->name('kuwago.dashboard');
 });
 
 Route::middleware(['auth', 'role:uddesign'])->group(function () {
     Route::get('/uddesign/dashboard', [RoleController::class, 'uddesign_dashboard'])->name('uddesign.dashboard');
 });
 
-Route::resource('/business', BusinessInfoController::class);
 
 require __DIR__.'/auth.php';

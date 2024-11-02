@@ -22,6 +22,6 @@ class ChartDataController extends Controller
 
         // $chartdata=ChartData::all();
         // return view('dashboard.show', compact('chartdata'));
-        return view('admin.dashboard', compact('chartdata'));
+        return view('roles.admin.dashboard', compact('chartdata'));
     }
 }

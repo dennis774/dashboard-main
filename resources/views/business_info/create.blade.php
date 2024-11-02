@@ -27,11 +27,11 @@
                             <input type="text" class="form-control" name="business_name" required>
                         </div>
                         <div class="form-group mb-3">
-                            <label for="business_image">business_image</label>
+                            <label for="business_image">Business Image</label>
                             <input type="file" class="form-control" name="business_image" required>
                         </div>
                         <div class="form-group mb-3">
-                            <label for="business_logo">business_logo</label>
+                            <label for="business_logo">Business Logo</label>
                             <input type="file" class="form-control" name="business_logo" required>
                         </div>
                         <div class="form-group mb-3">

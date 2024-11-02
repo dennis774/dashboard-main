@@ -15,24 +15,24 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'name' => 'Admin',
+            'name' => 'Owner',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('admin'),
-            'role' => 'admin'
+            'role' => 'owner'
         ]);
 
         User::create([
-            'name' => 'Kuwago_one',
-            'email' => 'kuwago_one@gmail.com',
+            'name' => 'General',
+            'email' => 'general@gmail.com',
             'password' => Hash::make('admin'),
-            'role' => 'kuwago_one'
+            'role' => 'general'
         ]);
 
         User::create([
-            'name' => 'Kuwago_two',
-            'email' => 'kuwago_two@gmail.com',
+            'name' => 'Kuwago',
+            'email' => 'kuwago@gmail.com',
             'password' => Hash::make('admin'),
-            'role' => 'kuwago_two'
+            'role' => 'kuwago'
         ]);
 
         User::create([
@@ -40,13 +40,6 @@ class UserSeeder extends Seeder
             'email' => 'uddesign@gmail.com',
             'password' => Hash::make('admin'),
             'role' => 'uddesign'
-        ]);
-
-        User::create([
-            'name' => 'User',
-            'email' => 'user@gmail.com',
-            'password' => Hash::make('admin'),
-            'role' => 'user'
         ]);
     }
 }
