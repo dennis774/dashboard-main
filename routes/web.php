@@ -1,22 +1,23 @@
 <?php
 
-use App\Http\Controllers\AccountController;
-use App\Http\Controllers\BusinessInfoController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ChartDataController;
-use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ExpensesController;
+use App\Http\Controllers\ChartDataController;
+use App\Http\Controllers\BusinessInfoController;
+use App\Http\Controllers\KuwagoOne\KuwagoController;
 
 Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/account/password', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -30,7 +31,9 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['auth', 'role:owner'])->group(function(){
         Route::get('/admin/dashboard', [RoleController::class, 'admin_dashboard'])->name('roles.admin.dashboard');
         Route::get('/admin/dashboard', [ChartDataController::class, 'index'])->name('roles.admin.dashboard');
-
+        Route::get('/kuwago-one', [KuwagoController::class, 'general_kuwago'])->name('general.kuwago-one.dashboard');
+        Route::get('/kuwago-one/expenses', [KuwagoController::class, 'chart_expenses_kuwago'])->name('general.kuwago-one.expenses');
+        Route::get('/kuwago-one/sales', [KuwagoController::class, 'chart_sales_kuwago'])->name('general.kuwago-one.sales');
 
         Route::get('/admin/expenses', [PageController::class, 'expenses_index'])->name('pages.Expenses.index');
         Route::get('/admin/expenses', [ExpensesController::class, 'chart_expenses_index'])->name('pages.Expenses.index');
