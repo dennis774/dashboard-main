@@ -5,6 +5,7 @@ use App\Http\Controllers\BusinessInfoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChartDataController;
+use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalesController;
@@ -29,13 +30,16 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['auth', 'role:owner'])->group(function(){
         Route::get('/admin/dashboard', [RoleController::class, 'admin_dashboard'])->name('roles.admin.dashboard');
         Route::get('/admin/dashboard', [ChartDataController::class, 'index'])->name('roles.admin.dashboard');
-        // Route::post('/admin/dashboard', [ChartDataController::class, 'index_chart'])->name('admin.dashboard');
-    
-        Route::get('/admin/expenses', [PageController::class, 'expenses_index'])->name('pages.Expenses.index');
-        Route::get('/admin/feedbacks', [PageController::class, 'feedback_index'])->name('pages.Feedbacks.index');
-        Route::get('/admin/promos', [PageController::class, 'promo_index'])->name('pages.Promos.index');
-        Route::get('/admin/sales', [PageController::class, 'sales_index'])->name('pages.Sales.index');
 
+
+        Route::get('/admin/expenses', [PageController::class, 'expenses_index'])->name('pages.Expenses.index');
+        Route::get('/admin/expenses', [ExpensesController::class, 'chart_expenses_index'])->name('pages.Expenses.index');
+
+        Route::get('/admin/feedbacks', [PageController::class, 'feedback_index'])->name('pages.Feedbacks.index');
+
+        Route::get('/admin/promos', [PageController::class, 'promo_index'])->name('pages.Promos.index');
+
+        Route::get('/admin/sales', [PageController::class, 'sales_index'])->name('pages.Sales.index');
         Route::get('/admin/sales', [SalesController::class, 'chart_sales_index'])->name('pages.Sales.index');
 
         Route::resource('/account', AccountController::class);

@@ -2,6 +2,6 @@
 
 @section('content')
 
-@include('roles.admin.content')
+@include('pages.Expenses.content')
 
 @endsection
