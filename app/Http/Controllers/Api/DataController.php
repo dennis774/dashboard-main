@@ -29,9 +29,10 @@ class DataController extends Controller
         }
         ChartData::insert($array_of_data);
 
-        return response()->json([
-            'succesful' => true,
-            // 'data' => $data
-        ]);
+        // return response()->json([
+        //     'succesful' => true,
+        //     // 'data' => $data
+        // ]);
+        return redirect()->back()->with('success', 'Data refreshed successfully!');
     }
 }

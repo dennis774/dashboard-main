@@ -6,22 +6,22 @@
         <div class="col-lg-6">
             <div class="dropdown">
                 <select id="dateFilter" onchange="handleFilterChange()" class="dropdownforModal">
-                    <option value="today">Today</option>
-                    <option value="yesterday">Yesterday</option>
-                    <option value="last3days">Last 3 Days</option>
-                    <option value="last5days">Last 5 Days</option>
-                    <option value="last7days">Last 7 Days</option>
-                    <option value="thisweek">This Week</option>
-                    <option value="lastweek">Last Week</option>
-                    <option value="thismonth">This Month</option>
-                    <option value="lastmonth">Last Month</option>
-                    <option value="thisyear">This Year</option>
-                    <option value="lastyear">Last Year</option>
-                    <option value="overall">Overall</option>
-                    <option value="custom">Custom</option>
-                </select>
-            </div>
+                    <option value="today" {{ request('interval') == 'today' ? 'selected' : '' }}>Today</option>
+                    <option value="yesterday" {{ request('interval') == 'yesterday' ? 'selected' : '' }}>Yesterday</option>
+                    <option value="last3days" {{ request('interval') == 'last3days' ? 'selected' : '' }}>Last 3 Days</option>
+                    <option value="last5days" {{ request('interval') == 'last5days' ? 'selected' : '' }}>Last 5 Days</option>
+                    <option value="lastweek" {{ request('interval') == 'lastweek' ? 'selected' : '' }}>Last Week</option>
+                    <option value="thisweek" {{ request('interval', 'thisweek') == 'thisweek' ? 'selected' : '' }}>This Week</option>
+                    <option value="thismonth" {{ request('interval') == 'thismonth' ? 'selected' : '' }}>This Month</option>
+                    <option value="lastmonth" {{ request('interval') == 'lastmonth' ? 'selected' : '' }}>Last Month</option>
+                    <option value="thisyear" {{ request('interval') == 'thisyear' ? 'selected' : '' }}>This Year</option>
+                    <option value="lastyear" {{ request('interval') == 'lastyear' ? 'selected' : '' }}>Last Year</option>
+                    <option value="overall" {{ request('interval') == 'overall' ? 'selected' : '' }}>Overall</option>
+                    <option value="custom" {{ request('interval') == 'custom' ? 'selected' : '' }}>Custom</option>
+                </select>                
+            </div>            
         </div>
+
         <div class="col-lg-2">
             <i class="fas fa-filter filter-icon" onclick="updateChartWithFilter()"></i>
         </div>
@@ -30,7 +30,7 @@
     <div class="modal-bg" id="customDateModal">
         <div class="modal-content">
             <h5>Select Date Range</h5>
-            <form action="{{route('admin.dashboard')}}" method="GET">
+            <form action="{{$actionRoute}}" method="GET">
                 @csrf
                 <div class="form-group mb-3">
                     <label for="start_date" class="form-label text-white">Start Date:</label>

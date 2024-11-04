@@ -51,7 +51,7 @@
                                 <input type="text" class="form-control" name="description" value="{{ $business_infos->description }}" required>
                             </div>
                             <div class="text-center">
-                                <button type="submit" class="btn btn-primary">Update User</button>
+                                <button type="submit" class="btn btn-primary">Update Business</button>
                             </div>
                         </form>
                     </div>

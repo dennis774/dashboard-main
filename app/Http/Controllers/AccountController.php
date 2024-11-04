@@ -35,13 +35,19 @@ class AccountController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'user_image' => 'nullable|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
+            'phone_number' => 'required|string|max:255',
             'password' => 'required|string|min:8',
             'role' => 'required|string',
         ]);
         User::create([
             'name' => $request->name,
+            'description' => $request->description,
+            'user_image' => $request->user_image,
             'email' => $request->email,
+            'phone_number' => $request->phone_number,
             'password' => Hash::make($request->password),
             'role' => $request->role,
         ]);
@@ -72,17 +78,37 @@ class AccountController extends Controller
     public function update(Request $request, string $id)
     {
         $user = User::findOrFail($id);
-        $request->validate([
+        $rules=[
             'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'user_image' => 'nullable|image',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'initial' => 'required|string|max:255',
+            'suffix' => 'nullable|string',
             'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
+            'phone_number' => 'required|string|max:255',
             'role' => 'required|string',
-        ]);
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'role' => $request->role,
-        ]);
-        return redirect()->to('admin/account')->with('success', 'User updated successfully.');
+        ];
+        
+        
+        if (!$user->user_image) {
+            // Only require image if none exists
+            $rules['user_image'] = 'required|image';
+        }
+    
+        $validatedData = $request->validate($rules);
+    
+        // Handle image upload if new image is provided
+        if ($request->hasFile('user_image')) {
+            $fileName = time() . $request->file('user_image')->getClientOriginalName();
+            $request->file('user_image')->move(public_path('user_images'), $fileName);
+            $validatedData['user_image'] = $fileName;
+        }
+        
+        $user->update($validatedData);
+
+        return redirect()->to('/account')->with('success', 'User updated successfully.');
         
     }
 
@@ -93,6 +119,6 @@ class AccountController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
-        return redirect()->to('admin/account')->with('success', 'User deleted successfully.');
+        return redirect()->to('/account')->with('success', 'User deleted successfully.');
     }
 }

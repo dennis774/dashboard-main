@@ -12,7 +12,7 @@
                     <h1 class="text-center mb-4">Your Businesses</h1>
                     
                     <div class="mb-4">
-                        <a href="{{ url('admin/business/create') }}" class="btn btn-primary">Add New Business</a>
+                        <a href="{{ url('/business/create') }}" class="btn btn-primary">Add New Business</a>
                     </div>
                     @if(session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>

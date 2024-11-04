@@ -3,16 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\FakeData;
-use App\Models\ChartData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
-class ChartDataController extends Controller
+class SalesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
+    public function chart_sales_index(Request $request)
     {
         $interval = $request->input('interval','thisweek');
         $startDate = Carbon::now();
@@ -75,7 +71,7 @@ class ChartDataController extends Controller
 
 
         $chartdata = FakeData::whereBetween('date', [$startDate, $endDate])
-        ->selectRaw('date, SUM(sales) as sales, SUM(expenses) as expenses' )
+        ->selectRaw('date, SUM(sales) as sales, SUM(cash) as cash, SUM(gcash) as gcash')
         ->groupBy('date')
         ->get();
 
@@ -103,17 +99,16 @@ class ChartDataController extends Controller
                  return [
                     'date' => $formattedDate,
                     'sales' => $data ? $data->sales : 0,
-                    'expenses' => $data ? $data->expenses : 0, // Include expenses
-                    'profit' => $data ? ($data->sales - $data->expenses) : 0
+                    'cash' => $data ? $data->cash : 0,
+                    'gcash' => $data ? $data->gcash : 0,
                 ];
                 });
-        $actionRoute = route('roles.admin.dashboard'); // Dynamically set this based on your logic      
+                
+        $actionRoute = route('pages.Sales.index'); // Dynamically set this based on your logic      
         $totalSales = $chartdata->sum('sales');
-        $totalProfit = $chartdata->sum('profit');
-        $totalExpenses = $chartdata->sum('expenses');
-        return view('roles.admin.dashboard', compact('chartdata', 'totalSales', 'totalProfit', 'totalExpenses', 'actionRoute'));
+        $totalGcash = $chartdata->sum('gcash');
+        $totalCash = $chartdata->sum('cash');
+        return view('pages.Sales.index', compact('chartdata', 'totalSales', 'totalGcash', 'totalCash', 'actionRoute'));
 
     }
-
-    
 }

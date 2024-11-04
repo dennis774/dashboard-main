@@ -10,5 +10,6 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('refresh-data', [DataController::class, 'refreshData']);
+// Route::get('refresh-data', [DataController::class, 'refreshData']);
 Route::get('api-token', [ApiTokenController::class, 'getApiToken']);
+Route::get('/refresh-data', [DataController::class, 'refreshData'])->name('refresh.data');

@@ -1,19 +1,22 @@
 @extends('general.index-two') @section('content')
 
-<div class="container mb-100 account-page">
+<div class="container account-page">
     <div class="container text-center">
         <div class="row pt-5 pb-5">
             <div class="col-lg-2">
-                <a href="{{ url('admin/dashboard') }}"><i class="fa-solid fa-arrow-left fa-xl"></i></a>
+                <a href="{{ url('/account') }}"><i class="fa-solid fa-arrow-left fa-xl"></i></a>
             </div>
             <div class="col-lg-8">
+                @if ($user->role == 'owner')
+                <h3 style="">Edit My Account</h3>
+                @else
                 <h3 style="">Edit User Account</h3>
+                @endif
             </div>
-            <div class="col-lg-2">
-                <a href="{{ url('admin/account/create') }}"><i class="fa-solid fa-plus fa-xl"></i></a>
-            </div>
+            <div class="col-lg-2"></div>
         </div>
     </div>
+
     <div class="container">
         <div class="row">
             <div class="col-lg-2"></div>
@@ -28,45 +31,47 @@
                         </ul>
                     </div>
                     @endif
-                    <form method="POST" action="{{url('admin/account', $user->id)}}" enctype="multipart/form-data">
+                    <form method="POST" action="{{url('/account', $user->id)}}" enctype="multipart/form-data">
                         @csrf @method('PUT')
                         <div class="container">
                             <div class="row">
-                                <div class="col-lg-4 user-image" style="height: 140px;">User Image</div>
+                                <div class="col-lg-4 pt-5 pb-5">
+                                    <img src="{{ asset('user_images/' . $user->user_image) }}" alt="User Image" width="100">
+                                    {{-- <img src="https://via.placeholder.com/80" alt="User Image" class="user-image" /> --}}
+                                    <div class="form-group mb-3">
+                                        <label for="user_image">User Image</label>
+                                        <input type="file" class="form-control" name="user_image" value="{{ $user->user_image }}">
+                                    </div>
+                                </div>
                                 <div class="col-lg-8">
                                     <div class="container">
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="container">
                                                     <div class="row">
-                                                        <div class="col-lg-5 ps-0 border-black-border d-flex justify-content-center user-position">
-                                                            {{-- <p id="roleDisplay">
-                                                                @if ($user->role == 'owner') 
-                                                                    Business owner 
-                                                                @elseif ($user->role == 'general') 
-                                                                    Finance Officer 
-                                                                @elseif ($user->role == 'kuwago')
-                                                                    Operational Manager 
-                                                                @elseif ($user->role == 'uddesign') 
-                                                                    Operational Manager 
-                                                                @endif
-                                                            </p> --}}
+                                                        <div class="col-lg-5">
+                                                            <p id="roleDisplay2">
+                                                                @if ($user->role == 'owner') Business owner @elseif ($user->role == 'general') Finance Officer @elseif ($user->role == 'kuwago') Operational Manager
+                                                                @elseif($user->role=='uddesign') Operational Manager @endif
+                                                            </p>
                                                         </div>
+
                                                         <div class="col-lg-2"></div>
+
                                                         <div class="col-lg-5">
                                                             <button type="submit" class="btn btn-warning">Save</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-12 mt-1 d-flex align-items-center username">
+                                            <div class="col-lg-12">
                                                 <label for="username" class="form-label"></label>
-                                                <input type="text" class="form-control username-input" id="username" placeholder="Username" required />
+                                                <input type="text" class="form-control" name="name" value="{{ $user->name }}" placeholder="Username" required />
                                             </div>
 
-                                            <div class="col-lg-12 mt-1 d-flex align-items-center description">
+                                            <div class="col-lg-12">
                                                 <label for="description" class="form-label"></label>
-                                                <input type="text" class="form-control description-input" id="description" placeholder="Add Description" required />
+                                                <input type="text" class="form-control" name="description" value="{{ $user->description }}" placeholder="Add Description" required />
                                             </div>
                                         </div>
                                     </div>
@@ -74,20 +79,15 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-12">
+                                <div class="col-lg-6">
                                     <p>Access</p>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-6 p-0">
                                     <div class="dropdown">
                                         @if ($user->role == 'owner')
-                                        <select class="form-control" name="role">
+                                        <select class="form-control" id="roleSelect" name="role" onchange="syncRole()">
                                             <option value="owner" {{ $user->role == 'owner' ? 'selected' : '' }}>Owner</option>
                                         </select>
                                         @else
-                                        <select class="form-control" name="role" id="accessSelect" onchange="updateRole()">
+                                        <select class="form-control" id="roleSelect" name="role" onchange="syncRole()">
                                             <option value="general" {{ $user->role == 'general' ? 'selected' : '' }}>General</option>
                                             <option value="kuwago" {{ $user->role == 'kuwago' ? 'selected' : '' }}>Kuwago</option>
                                             <option value="uddesign" {{ $user->role == 'uddesign' ? 'selected' : '' }}>UdDesign</option>
@@ -95,19 +95,12 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="col-lg-6 p-0">
+                                <div class="col-lg-6">
+                                    <p>Role</p>
                                     <div class="dropdown">
-                                        <p>Role</p>
                                         <p id="roleDisplay">
-                                            @if ($user->role == 'owner') 
-                                                Business owner 
-                                            @elseif ($user->role == 'general') 
-                                                Finance Officer 
-                                            @elseif ($user->role == 'kuwago')
-                                                Operational Manager 
-                                            @elseif ($user->role == 'uddesign') 
-                                                Operational Manager 
-                                            @endif
+                                            @if ($user->role == 'owner') Business owner @elseif ($user->role == 'general') Finance Officer @elseif ($user->role == 'kuwago') Operational Manager @elseif($user->role =='uddesign') Operational
+                                            Manager @endif
                                         </p>
                                     </div>
                                 </div>
@@ -115,48 +108,48 @@
 
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <h6 style="color: #fff;">Profile</h6>
+                                    <p>Profile</p>
                                 </div>
                             </div>
 
-                            <div class="row fullname">
+                            <div class="row">
                                 <div class="col-lg-6">
-                                    <div class="d-flex align-items-center fname">
-                                        <label for="first_name" class="form-label" style="color: #fff; font-size: 15px; font-weight: bold;">Firstname: </label>
-                                        <input type="text" class="form-control fname-input" placeholder="First Name" id="fname" required />
+                                    <div class="">
+                                        <label for="first_name" class="form-label">Firstname: </label>
+                                        <input type="text" class="form-control" name="first_name" value="{{ $user->first_name }}" placeholder="First Name" required />
                                     </div>
-                                    <div class="d-flex align-items-center">
-                                        <label for="last_name" class="form-label" style="color: #fff; font-size: 15px; font-weight: bold;">Lastname: </label>
-                                        <input type="text" class="form-control lname-input" placeholder="Last Name" id="lname" required />
+                                    <div class="">
+                                        <label for="last_name" class="form-label">Lastname: </label>
+                                        <input type="text" class="form-control" name="last_name" value="{{ $user->last_name }}" placeholder="Last Name" required />
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="d-flex align-items-center">
-                                        <label for="middle_name" class="form-label" style="color: #fff; font-size: 15px; font-weight: bold;">Initial: </label>
-                                        <input type="text" class="form-control mname-input" placeholder="Initial" id="mname" required />
+                                    <div class="">
+                                        <label for="middle_name" class="form-label">Initial: </label>
+                                        <input type="text" class="form-control" name="initial" value="{{ $user->initial }}" placeholder="Initial" required />
                                     </div>
-                                    <div class="d-flex align-items-center">
-                                        <label for="suffix" class="form-label" style="color: #fff; font-size: 15px; font-weight: bold;">Suffix: </label>
-                                        <input type="text" class="form-control suffix-input" placeholder="Suffix" id="suffix" required />
+                                    <div class="">
+                                        <label for="suffix" class="form-label">Suffix: </label>
+                                        <input type="text" class="form-control" name="suffix" value="{{ $user->suffix }}" placeholder="Suffix" />
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <h6 style="color: #fff;">Contact</h6>
+                                    <p>Contact</p>
                                 </div>
                             </div>
 
-                            <div class="row contact">
+                            <div class="row">
                                 <div class="col-lg-12">
                                     <div class="d-flex align-items-center">
-                                        <label for="email" class="form-label pe-3" style="color: #fff; font-size: 15px; font-weight: bold;">Email: </label>
-                                        <input type="text" class="form-control email-input" placeholder="Enter Email..." id="email" required />
+                                        <label for="email" class="form-label pe-3">Email: </label>
+                                        <input type="text" class="form-control" name="email" value="{{ $user->email }}" placeholder="Enter Email" required />
                                     </div>
                                     <div class="d-flex align-items-center mt-2">
-                                        <label for="phone" class="form-label pe-2" style="color: #fff; font-size: 15px; font-weight: bold;">Phone: </label>
-                                        <input type="text" class="form-control phone-input" placeholder="Enter Phone..." id="phone" required />
+                                        <label for="phone_number" class="form-label pe-2">Phone: </label>
+                                        <input type="text" class="form-control" name="phone_number" value="{{ $user->phone_number }}" placeholder="Enter Phone Number" required />
                                     </div>
                                 </div>
                             </div>
@@ -164,9 +157,13 @@
                             <div class="row">
                                 <div class="col-lg-8"></div>
                                 <div class="col-lg-4">
-                                    <a href="/admin/users/changepass" class="linktopass">
-                                        <p class="mb-0">Change Password</p>
-                                    </a>
+                                    @if ($user->role == 'owner')
+                                    <button class="btn btn-light">
+                                        <a href="/account/password">
+                                            Change Password
+                                        </a>
+                                    </button>
+                                    @else @endif
                                 </div>
                             </div>
                         </div>
@@ -182,14 +179,16 @@
         </div>
     </div>
 </div>
+
 <script>
-    function updateRole() {
-        var accessSelect = document.getElementById("accessSelect");
+    function syncRole() {
+        var roleSelect = document.getElementById("roleSelect");
+        var roleDisplay2 = document.getElementById("roleDisplay2");
         var roleDisplay = document.getElementById("roleDisplay");
-        var selectedAccess = accessSelect.value;
+        var selectedRole = roleSelect.value;
 
         var roleText = "";
-        switch (selectedAccess) {
+        switch (selectedRole) {
             case "owner":
                 roleText = "Business owner";
                 break;
@@ -197,12 +196,12 @@
                 roleText = "Finance Officer";
                 break;
             case "kuwago":
-                roleText = "Operational Manager";
-                break;
             case "uddesign":
                 roleText = "Operational Manager";
                 break;
         }
+
+        roleDisplay2.innerText = roleText;
         roleDisplay.innerText = roleText;
     }
 </script>

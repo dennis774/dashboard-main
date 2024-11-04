@@ -6,11 +6,31 @@
             labels: @json($chartdata->pluck('date')),
             datasets: [{
                 label: 'Sales',
-                data: @json($chartdata->pluck('total_remittance')),
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
+                data: @json($chartdata->pluck('sales')),
+                backgroundColor: 'green',
+                borderColor: 'green',
                 borderWidth: 1,
                 fill: 'origin'
+
+                
+            },{
+                label: 'Profit',
+                data: @json($chartdata->pluck( 'profit' )),
+                backgroundColor: 'yellow',
+                borderColor: 'yellow',
+                borderWidth: 1,
+                fill: 'origin'
+
+                
+            },{
+                label: 'Expenses',
+                data: @json($chartdata->pluck('expenses')),
+                backgroundColor: 'white',
+                borderColor: 'white',
+                borderWidth: 1,
+                fill: 'origin'
+
+                
             }]
         },
         options: {

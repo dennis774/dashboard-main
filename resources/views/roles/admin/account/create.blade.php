@@ -1,62 +1,161 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('general.index-two') @section('content')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+<div class="container account-page">
+    <div class="container text-center">
+        <div class="row pt-5 pb-5">
+            <div class="col-lg-2">
+                <a href="{{ url('/account') }}"><i class="fa-solid fa-arrow-left fa-xl"></i></a>
+            </div>
+            <div class="col-lg-8">
+                <h3 style="">Create New User</h3>
+            </div>
+            <div class="col-lg-2"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-8">
                 <div class="container">
-                    <h1 class="text-center mb-4">Create New User</h1>
                     @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
                     @endif
-                    <form method="POST" action="{{ url('admin/account') }}" enctype="multipart/form-data"> 
-                    {{-- <form action="{{ route('admin.account.store') }}" method="POST"> --}}
+
+                    <form method="POST" action="{{ url('admin/account') }}" enctype="multipart/form-data">
                         @csrf
-                        <div class="form-group mb-3">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" name="name" required>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="email">Email</label>
-                            <input type="email" class="form-control" name="email" required>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control" name="password" required>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="role">Role</label>
-                            <select class="form-control" name="role">
-                                <option value="admin">Admin/Owner</option>
-                                <option value="kuwago_one">Kuwago One Manager</option>
-                                <option value="kuwago_  two">Kuwago Two Manager</option>
-                                <option value="uddesign">Uddesign Manager</option>
-                            </select>
-                        </div>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-success">Create User</button>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-4 pt-5 pb-5">
+                                    <img src="https://via.placeholder.com/80" alt="User Image" class="user-image" />
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-lg-5">
+                                                            <p id="roleDisplay2">
+                                                                Role
+                                                            </p>
+                                                        </div>
+
+                                                        <div class="col-lg-2"></div>
+
+                                                        <div class="col-lg-5">
+                                                            <button type="submit" class="btn btn-warning">Save</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <label for="username" class="form-label"></label>
+                                                <input type="text" class="form-control" name="name" placeholder="Username" required />
+                                            </div>
+
+                                            <div class="col-lg-12">
+                                                <label for="description" class="form-label"></label>
+                                                <input type="text" class="form-control" name="description" placeholder="Add Description" required />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <p>Access</p>
+                                </div>
+                                <div class="col-lg-6">
+                                    <p></p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="">
+                                        <select class="form-control" id="roleSelect" name="role" onchange="syncRole()">
+                                            <option value="">Choose Access</option>
+                                            <option value="general">General</option>
+                                            <option value="kuwago">Kuwago</option>
+                                            <option value="uddesign">UdDesign</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="">
+                                        <p id="roleDisplay">
+                                            -Role-
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <p>Set-up the Account</p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="d-flex align-items-center mt-2">
+                                        <label for="phone_number" class="form-label pe-2">Phone: </label>
+                                        <input type="text" class="form-control" name="phone_number" placeholder="Enter Phone Number" required />
+                                    </div>
+                                    <div class="d-flex align-items-center mt-2">
+                                        <label for="email" class="form-label pe-3">Email: </label>
+                                        <input type="text" class="form-control" name="email" placeholder="Enter Email" required />
+                                    </div>
+                                    <div class="d-flex align-items-center mt-2">
+                                        <label for="password" class="form-label pe-2">password: </label>
+                                        <input type="text" class="form-control" name="password" value="Kuwago1Accounts" placeholder="Enter Phone Number" required />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
                 @if (session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
                 @endif
             </div>
+            <div class="col-lg-2"></div>
         </div>
     </div>
-</x-app-layout>
+</div>
 
+<script>
+    function syncRole() {
+        var roleSelect = document.getElementById("roleSelect");
+        var roleDisplay2 = document.getElementById("roleDisplay2");
+        var roleDisplay = document.getElementById("roleDisplay");
+        var selectedRole = roleSelect.value;
 
+        var roleText = "";
+        switch (selectedRole) {
+            case "owner":
+                roleText = "Business owner";
+                break;
+            case "general":
+                roleText = "Finance Officer";
+                break;
+            case "kuwago":
+            case "uddesign":
+                roleText = "Operational Manager";
+                break;
+        }
 
+        roleDisplay2.innerText = roleText;
+        roleDisplay.innerText = roleText;
+    }
+</script>
+@endsection

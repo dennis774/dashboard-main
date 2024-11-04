@@ -8,13 +8,9 @@
         const filter = document.getElementById("dateFilter").value;
         if (filter === "custom") {
             document.getElementById("customDateModal").style.display = "flex";
+        } else {
+            window.location.href = `{{$actionRoute}}?interval=${filter}`;
         }
-    }
-
-    function updateChartWithFilter() {
-        const filter = document.getElementById("dateFilter").value;
-        // Implement chart update logic based on filter selection
-        alert("Chart Updated with filter: " + filter); // Placeholder
     }
 
     function closeModal() {

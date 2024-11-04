@@ -19,17 +19,17 @@
                                     <div class="col-lg-6 card-box">
                                         <i class="fa-solid fa-chart-line"></i>
                                         <p>Total Sales</p>
-                                        <p><i class="fa-solid fa-peso-sign"></i>P</p>
+                                        <p><i class="fa-solid fa-peso-sign"></i>P{{$totalSales}}</p>
                                     </div>
                                     <div class="col-lg-6 card-box">
                                         <i class="fa-solid fa-coins"></i>
                                         <p>Total Profit</p>
-                                        <p><i class="fa-solid fa-peso-sign"></i>2,000.00</p>
+                                        <p><i class="fa-solid fa-peso-sign"></i>{{$totalProfit}}</p>
                                     </div>
                                     <div class="col-lg-6 card-box">
                                         <i class="fa-solid fa-money-bill"></i>
                                         <p>Total Expenses</p>
-                                        <p>1,700.00</p>
+                                        <p>{{$totalExpenses}}</p>
                                     </div>
                                     <div class="col-lg-6 card-box">
                                         <i class="fa-solid fa-cart-shopping"></i>
@@ -46,14 +46,12 @@
                         <div class="col-lg-6">
                             <div class="container">
                                 <div class="row">
-                                    <div class="col-lg-12 card-box">
-                                        <form method="GET" action="/admin/dashboard">
-                                            <input type="date" name="start_date" required>
-                                            <input type="date" name="end_date" required>
-                                            <button type="submit">Filter</button>
+                                    <div class="col-lg-12 card-box">      
+                                        <canvas id="myChart" width="400" height="200"></canvas>
+                                        <form action="{{ route('refresh.data') }}" method="GET">
+                                            <button type="submit" class="btn btn-primary">Refresh Data</button>
                                         </form>
                                         
-                                        <canvas id="myChart" width="400" height="200"></canvas>
                                     </div>
 
                                     <div class="col-lg-12">

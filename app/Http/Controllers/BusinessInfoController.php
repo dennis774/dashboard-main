@@ -32,18 +32,16 @@ class BusinessInfoController extends Controller
         ]);
         if ($request->hasFile('business_image')) {
             $fileName = time() . $request->file('business_image')->getClientOriginalName();
-            $request->file('business_image')->move(public_path('images'), $fileName);
+            $request->file('business_image')->move(public_path('business_images'), $fileName);
             $validatedData['business_image'] = $fileName;
         }
         if ($request->hasFile('business_logo')) {
             $fileName = time() . $request->file('business_logo')->getClientOriginalName();
-            $request->file('business_logo')->move(public_path('logos'), $fileName);
+            $request->file('business_logo')->move(public_path('business_logos'), $fileName);
             $validatedData['business_logo'] = $fileName;
         }
         BusinessInfo::create($validatedData);
-        return redirect()
-            ->to('/business')
-            ->with('success', 'User created successfully.');
+        return redirect()->to('/business')->with('success', 'Business created successfully.');
     }
 
     public function edit(string $id)
@@ -66,20 +64,18 @@ class BusinessInfoController extends Controller
         ]);
         if ($request->hasFile('business_image')) {
             $fileName = time() . $request->file('business_image')->getClientOriginalName();
-            $request->file('business_image')->move(public_path('images'), $fileName);
+            $request->file('business_image')->move(public_path('business_images'), $fileName);
             $validatedData['business_image'] = $fileName;
         }
         if ($request->hasFile('business_logo')) {
             $fileName = time() . $request->file('business_logo')->getClientOriginalName();
-            $request->file('business_logo')->move(public_path('logos'), $fileName);
+            $request->file('business_logo')->move(public_path('business_logos'), $fileName);
             $validatedData['business_logo'] = $fileName;
         }
         
         $data->update($validatedData);
 
-        return redirect()
-            ->to('/business')
-            ->with('success', 'User updated successfully.');
+        return redirect()->to('/business')->with('success', 'Business updated successfully.');
     }
 
     public function destroy(string $id)
@@ -95,8 +91,6 @@ class BusinessInfoController extends Controller
         Storage::delete('public/logos/' . $data->business_logo);
     }
         $data->delete();
-        return redirect()
-            ->to('/business')
-            ->with('success', 'User updated successfully.');
+        return redirect()->to('/business')->with('success', 'Business deleted successfully.');
     }
 }

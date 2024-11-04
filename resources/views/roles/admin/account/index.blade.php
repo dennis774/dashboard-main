@@ -1,5 +1,5 @@
 @extends('general.index-two') @section('content')
-<div class="container mb-100 account-page">
+<div class="container account-page">
     <div class="container text-center">
         <div class="row pt-5 pb-5">
             <div class="col-lg-2">
@@ -9,11 +9,11 @@
                 <h3 style="">Accounts</h3>
             </div>
             <div class="col-lg-2">
-                <a href="{{ url('admin/account/create') }}"><i class="fa-solid fa-plus fa-xl"></i></a>
+                <a href="{{ url('account/create') }}"><i class="fa-solid fa-plus fa-xl"></i></a>
             </div>
         </div>
     </div>
-    <div class="container ">
+    <div class="container">
         <div class="row">
             <div class="col-lg-2"></div>
             <div class="col-lg-8">
@@ -22,14 +22,11 @@
                 @endif
                 <div class="container">
                     <div class="row">
-                        <div class="col-lg-12">
-                            <i class="fa-regular fa-user fa-xl"></i><span>All Accounts</span>
-                        </div>
+                        <div class="col-lg-12"><i class="fa-regular fa-user fa-xl"></i><span>All Accounts</span></div>
                     </div>
                 </div>
                 <div class="container overflow-auto" style="height: 400px;">
                     <div class="row">
-                        
                         @foreach($users as $user)
                         <div class="col-lg-10">
                             <div class="container">
@@ -42,7 +39,12 @@
                                         <div class="container">
                                             <div class="row">
                                                 <div class="col-lg-12"><p>{{ $user->name }}</p></div>
-                                                <div class="col-lg-12"><p>{{ $user->role }}</p></div>
+                                                <div class="col-lg-12">
+                                                    <p>
+                                                        @if ($user->role == 'owner') Business owner @elseif ($user->role == 'general') Finance Officer @elseif ($user->role == 'kuwago') Operational Manager @elseif($user->role =='uddesign')
+                                                        Operational Manager @endif
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -53,12 +55,12 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="col-lg-6">
-                                        <a href="{{ url('admin/account', $user->id) }}/edit">
+                                        <a href="{{ url('/account', $user->id) }}/edit">
                                             <i class="fa-regular fa-pen-to-square fa-xl"></i>
                                         </a>
                                     </div>
                                     <div class="col-lg-6 delete-button">
-                                        <form action="{{ url('admin/account', $user->id)}}" method="post" style="display: inline-block;">
+                                        <form action="{{ url('/account', $user->id)}}" method="post" style="display: inline-block;">
                                             @csrf @method('DELETE')
 
                                             <button type="submit" class="btn" onclick="return confirm('Are you sure?')">

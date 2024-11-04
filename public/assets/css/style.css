@@ -1,16 +1,16 @@
 div.top-bar {
     margin: 40px 0 20px 0;
-    padding:5px ; 
-    background: rgba(255, 255, 255, 0.1) ;
-    border-radius: 30px ; 
-    backdrop-filter: blur(10px) ;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) ;
+    padding: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 /* div.side-bar {
     
 } */
-div.side-bar ul.nav{
+div.side-bar ul.nav {
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
     border-radius: 50px;
@@ -37,13 +37,11 @@ div.card-box {
 }
 
 div.footer {
-background: rgba(255, 255, 255, 0.2);
-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-backdrop-filter: blur(10px);
-border-radius: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border-radius: 40px;
 }
-
-
 
 .modal-bg {
     display: none;
@@ -79,57 +77,55 @@ border-radius: 40px;
     color: #000; /* Set input text color to black for visibility */
 }
 
-
-body, html {
+body,
+html {
     height: 100%;
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
-  }
-  
-  * {
+}
+
+* {
     box-sizing: border-box;
-  }
-  
-body{
+}
+
+body {
     /* The image used */
     background-image: url("https://t4.ftcdn.net/jpg/07/94/30/45/360_F_794304521_O4o0Y5UrvKtDxBNHY9utMowV2VhuhRpk.jpg");
     backdrop-filter: blur(15px);
-    
+
     /* Center and scale the image nicely */
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-  }
-
+}
 
 /* Style for icons */
-i{
+i {
     color: #ffffff;
 }
 /* Style for User Accounts */
 .account-page h3,
 .account-page span,
-.account-page p {
+.account-page p,
+.account-page label {
     color: #ffffff;
 }
 
-.account-page .delete-button button{
+.account-page .delete-button button {
     padding: 0;
 }
-.account-page span{
-    font-size:x-large;
+.account-page span {
+    font-size: x-large;
     margin-left: 10px;
 }
 
-.account-page img{
+.account-page img {
     border: 2px solid #ffffff;
     border-radius: 100%;
-    
 }
 
-
 /* Style for TopBar */
-.top-bar img{
+.top-bar img {
     border-radius: 100%;
     height: 50px;
     width: 50px;

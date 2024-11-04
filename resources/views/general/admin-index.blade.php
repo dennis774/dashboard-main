@@ -6,7 +6,6 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>Cap-Board</title>
         {{-- BOOTSTRAP --}}
-        <script src="{{ url('assets/js/chart.umd.js') }}"></script>
         <link href="{{ url('assets/css/style.css') }}" rel="stylesheet" />
         <link href="{{ url('assets/css/bootstrap.min.css') }}" rel="stylesheet" />
         {{-- END OF BOOTSTRAP --}} {{-- FONT AWESOME --}}
@@ -16,12 +15,13 @@
     <body>
         <div class="container-fluid">
             <!-- Navbar -->
-            @include('general.navbar')
+            @include('general.admin-navbar')
             <!-- /.navbar -->
 
             @yield('content') @include('general.footer')
         </div>
         <script src="{{ url('assets/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ url('assets/js/chart.umd.js') }}"></script>
         @yield('scripts') @include('general.footer-script')
     </body>
 </html>
