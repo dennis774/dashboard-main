@@ -60,6 +60,16 @@
                                         </a>
                                     </div>
                                     <div class="col-lg-6 delete-button">
+                                        @if ($user->role == 'owner')
+                                        <form action="{{ url('/account', $user->id)}}" method="post" style="display: inline-block;">
+                                            @csrf @method('DELETE')
+
+                                            <button type="submit" class="btn" onclick="return confirm('Are you sure?')" disabled>
+                                                <i class="fa-regular fa-trash-can fa-xl"></i>
+                                            </button>
+                                        </form>
+                                            
+                                        @else
                                         <form action="{{ url('/account', $user->id)}}" method="post" style="display: inline-block;">
                                             @csrf @method('DELETE')
 
@@ -67,6 +77,8 @@
                                                 <i class="fa-regular fa-trash-can fa-xl"></i>
                                             </button>
                                         </form>
+                                            
+                                        @endif
                                     </div>
                                 </div>
                             </div>

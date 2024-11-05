@@ -2,12 +2,12 @@
 
 @section('content')
 
-@include('general.kuwago-one.content')
+@include('general.kuwago-one.dashboard-content')
 
 @endsection
 
 @section('scripts')
 
-@include('roles.admin.bar_chart')
+@include('charts.kuwago_one.bar_chart')
 
 @endsection

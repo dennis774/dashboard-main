@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 
-class KuwagoController extends Controller
+class Kuwago_OneController extends Controller
 {
-    public function general_kuwago(Request $request)
+    public function general_kuwago_one(Request $request)
     {
         $interval = $request->input('interval','thisweek');
         $startDate = Carbon::now();
@@ -112,7 +112,7 @@ class KuwagoController extends Controller
 
     }
 
-    public function chart_expenses_kuwago(Request $request)
+    public function chart_expenses_kuwago_one(Request $request)
     {
         $interval = $request->input('interval','thisweek');
         $startDate = Carbon::now();
@@ -212,7 +212,7 @@ class KuwagoController extends Controller
 
     }
 
-    public function chart_sales_kuwago(Request $request)
+    public function chart_sales_kuwago_one(Request $request)
     {
         $interval = $request->input('interval','thisweek');
         $startDate = Carbon::now();

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 
 class AccountController extends Controller
@@ -52,7 +53,7 @@ class AccountController extends Controller
             'role' => $request->role,
         ]);
         // return redirect()->route('admin.account.index')->with('success', 'User created successfully.');
-        return redirect()->to('admin/account')->with('success', 'User created successfully.');
+        return redirect()->to('/account')->with('success', 'User created successfully.');
     }
 
     /**
@@ -115,10 +116,24 @@ class AccountController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    // public function destroy(string $id)
+    // {
+    //     $user = User::findOrFail($id);
+    //     $user->delete();
+    //     return redirect()->to('/account')->with('success', 'User deleted successfully.');
+    // }
+
+    public function destroy($id)
     {
         $user = User::findOrFail($id);
+
+        $imagePath = public_path('user_images/' . $user->user_image);
+
+        if (File::exists($imagePath)) {
+            File::delete($imagePath);
+        }
         $user->delete();
-        return redirect()->to('/account')->with('success', 'User deleted successfully.');
+
+        return redirect()->to('/account')->with('success', 'User data and associated images deleted successfully.');
     }
 }

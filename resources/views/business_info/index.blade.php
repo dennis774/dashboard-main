@@ -39,10 +39,10 @@
                                     <td>{{ $business->location }}</td>
                                     <td>{{ $business->description }}</td>
                                     <td>
-                                        <img src="{{ asset('images/' . $business->business_image) }}" alt="Product Image" width="100">
+                                        <img src="{{ asset('business_images/' . $business->business_image) }}" alt="Product Image" width="100">
                                     </td>
                                     <td>
-                                        <img src="{{ asset('logos/' . $business->business_logo) }}" alt="Business Logo" width="100">
+                                        <img src="{{ asset('business_logos/' . $business->business_logo) }}" alt="Business Logo" width="100">
                                     </td>
                                     <td>
                                         

@@ -1,11 +1,11 @@
     {{-- START --}}
-    <div class="container text-center">
+    <div class="container text-center content-container">
         <div class="row mb-5">
             {{-- START OF SIDE BAR --}}
             <div class="col-lg-1">
                 <div class="container">
                     <div class="row">
-                        @include('general.kuwago-one.sidebar')
+                        @include('general.kuwago-two.sidebar')
                     </div>
                 </div>
             </div>

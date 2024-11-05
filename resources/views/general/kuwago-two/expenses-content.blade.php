@@ -5,7 +5,7 @@
             <div class="col-lg-1">
                 <div class="container">
                     <div class="row">
-                        @include('general.kuwago-one.sidebar')
+                        @include('general.kuwago-two.sidebar')
                     </div>
                 </div>
             </div>

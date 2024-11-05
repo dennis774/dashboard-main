@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BusinessInfo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class BusinessInfoController extends Controller
@@ -78,19 +79,27 @@ class BusinessInfoController extends Controller
         return redirect()->to('/business')->with('success', 'Business updated successfully.');
     }
 
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        $data = BusinessInfo::find($id);
-        // Delete the business image if it exists
-    if ($data->business_image) {
-        Storage::delete('public/images/' . $data->business_image);
+        $data = BusinessInfo::findOrFail($id);
+
+        // Assuming your image path is stored in a column named 'business_image' and 'business_logo'
+        $imagePath = public_path('business_images/' . $data->business_image);
+        $logoPath = public_path('business_logos/' . $data->business_logo);
+
+        // Check if the image files exist and delete them
+        if (File::exists($imagePath)) {
+            File::delete($imagePath);
+        }
+
+        if (File::exists($logoPath)) {
+            File::delete($logoPath);
+        }
+
+        // Delete the record from the database
+        $data->delete();
+
+        return redirect()->to('/business')->with('success', 'Business data and associated images deleted successfully.');
     }
 
-    // Delete the business logo if it exists
-    if ($data->business_logo) {
-        Storage::delete('public/logos/' . $data->business_logo);
-    }
-        $data->delete();
-        return redirect()->to('/business')->with('success', 'Business deleted successfully.');
-    }
 }

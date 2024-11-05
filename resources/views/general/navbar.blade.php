@@ -2,7 +2,7 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-2"></div>
-        <div class="col-lg-8 top-bar">
+        <div class="col-lg-8 nav-bar">
             <div style="container">
                 <div class="row">
                     <div class="col-lg-4">
@@ -14,13 +14,12 @@
                         <div class="mx-auto dropdown-oval-container">
                             <div class="dropdown">
                                 <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Main
+                                    Business
                                 </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <li><a class="dropdown-item" href="#">Main</a></li>
-                                    <li><a class="dropdown-item" href="#">Kuwago Cafe 1</a></li>
-                                    <li><a class="dropdown-item" href="#">Kuwago Cafe 2</a></li>
-                                    <li><a class="dropdown-item" href="#">Uddesign</a></li>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" >
+                                    <li><a class="dropdown-item" href="{{url('/kuwago-one')}}">Kuwago Cafe 1</a></li>
+                                    <li><a class="dropdown-item" href="{{url('/kuwago-two')}}">Kuwago Cafe 2</a></li>
+                                    <li><a class="dropdown-item" href="{{url('/uddesign')}}">Uddesign</a></li>
                                 </ul>
                             </div>
                         </div>

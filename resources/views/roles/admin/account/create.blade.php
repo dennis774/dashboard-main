@@ -28,7 +28,7 @@
                     </div>
                     @endif
 
-                    <form method="POST" action="{{ url('admin/account') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ url('/account') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="container">
                             <div class="row">
