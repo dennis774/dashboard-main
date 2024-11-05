@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 
 class Kuwago_TwoController extends Controller
 {
+    // for dashboard
     public function general_kuwago_two(Request $request)
     {
         $interval = $request->input('interval','thisweek');
@@ -113,7 +114,7 @@ class Kuwago_TwoController extends Controller
         return view('general.kuwago-two.dashboard', compact('chartdata', 'totalSales', 'totalProfit', 'totalExpenses','totalOrders', 'actionRoute'));
 
     }
-
+    // for expenses
     public function chart_expenses_kuwago_two(Request $request)
     {
         $interval = $request->input('interval','thisweek');
@@ -213,7 +214,7 @@ class Kuwago_TwoController extends Controller
         return view('general.kuwago-two.expenses', compact('chartdata', 'totalExpenses', 'actionRoute'));
 
     }
-
+    // for sales
     public function chart_sales_kuwago_two(Request $request)
     {
         $interval = $request->input('interval','thisweek');

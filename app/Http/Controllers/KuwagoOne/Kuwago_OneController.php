@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 
 class Kuwago_OneController extends Controller
 {
+    // for dashboard
     public function general_kuwago_one(Request $request)
     {
         $interval = $request->input('interval','thisweek');
@@ -113,7 +114,7 @@ class Kuwago_OneController extends Controller
         return view('general.kuwago-one.dashboard', compact('chartdata', 'totalSales', 'totalProfit', 'totalExpenses','totalOrders', 'actionRoute'));
 
     }
-
+    // for expenses
     public function chart_expenses_kuwago_one(Request $request)
     {
         $interval = $request->input('interval','thisweek');
@@ -213,7 +214,7 @@ class Kuwago_OneController extends Controller
         return view('general.kuwago-one.expenses', compact('chartdata', 'totalExpenses', 'actionRoute'));
 
     }
-
+    // for sales
     public function chart_sales_kuwago_one(Request $request)
     {
         $interval = $request->input('interval','thisweek');

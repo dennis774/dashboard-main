@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 
 class UddesignController extends Controller
 {
+    // for dashbaord
     public function general_uddesign(Request $request)
     {
         $interval = $request->input('interval','thisweek');
@@ -112,7 +113,7 @@ class UddesignController extends Controller
         return view('general.uddesign.dashboard', compact('chartdata', 'totalSales', 'totalProfit', 'totalExpenses','totalOrders', 'actionRoute'));
 
     }
-
+    // for expenses
     public function chart_expenses_uddesign(Request $request)
     {
         $interval = $request->input('interval','thisweek');
@@ -212,7 +213,7 @@ class UddesignController extends Controller
         return view('general.uddesign.expenses', compact('chartdata', 'totalExpenses', 'actionRoute'));
 
     }
-
+    // for sales
     public function chart_sales_uddesign(Request $request)
     {
         $interval = $request->input('interval','thisweek');

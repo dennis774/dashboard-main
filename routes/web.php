@@ -17,9 +17,9 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/kuwago-one', function () {
+    return view('general.kuwago-one.dashboard');
+})->middleware(['auth', 'verified'])->name('general.kuwago-one.dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/account/password', [ProfileController::class, 'edit'])->name('profile.edit');
