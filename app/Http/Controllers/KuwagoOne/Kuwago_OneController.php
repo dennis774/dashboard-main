@@ -72,7 +72,7 @@ class Kuwago_OneController extends Controller
 
 
         $chartdata = FakeData::whereBetween('date', [$startDate, $endDate])
-        ->selectRaw('date, SUM(sales) as sales, SUM(expenses) as expenses' )
+        ->selectRaw('date, SUM(sales) as sales, SUM(expenses) as expenses,  SUM(orders) as orders' )
         ->groupBy('date')
         ->get();
 
@@ -99,16 +99,18 @@ class Kuwago_OneController extends Controller
 
                  return [
                     'date' => $formattedDate,
+                    'orders' => $data ? $data->orders : 0,
                     'sales' => $data ? $data->sales : 0,
-                    'expenses' => $data ? $data->expenses : 0, // Include expenses
+                    'expenses' => $data ? $data->expenses : 0,
                     'profit' => $data ? ($data->sales - $data->expenses) : 0
                 ];
                 });
-        $actionRoute = route('general.kuwago-one.dashboard'); // Dynamically set this based on your logic      
+        $actionRoute = route('general.kuwago-one.dashboard');
+        $totalOrders = $chartdata->sum('orders');      
         $totalSales = $chartdata->sum('sales');
         $totalProfit = $chartdata->sum('profit');
         $totalExpenses = $chartdata->sum('expenses');
-        return view('general.kuwago-one.dashboard', compact('chartdata', 'totalSales', 'totalProfit', 'totalExpenses', 'actionRoute'));
+        return view('general.kuwago-one.dashboard', compact('chartdata', 'totalSales', 'totalProfit', 'totalExpenses','totalOrders', 'actionRoute'));
 
     }
 

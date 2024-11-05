@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Uddesign;
 
-use App\Models\FakeData;
+use App\Models\FakeDataThree;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
@@ -57,8 +57,8 @@ class UddesignController extends Controller
                 $endDate = Carbon::now()->subYear()->endOfYear();
                 break;
             case 'overall':
-                $startDate =  Carbon::parse(FakeData::min('date'));
-                $endDate = Carbon::parse(FakeData::max('date'));
+                $startDate =  Carbon::parse(FakeDataThree::min('date'));
+                $endDate = Carbon::parse(FakeDataThree::max('date'));
                 break;
             case 'custom':
                 $startDate = Carbon::parse($request->input('start_date'));
@@ -71,8 +71,8 @@ class UddesignController extends Controller
         }
 
 
-        $chartdata = FakeData::whereBetween('date', [$startDate, $endDate])
-        ->selectRaw('date, SUM(sales) as sales, SUM(expenses) as expenses' )
+        $chartdata = FakeDataThree::whereBetween('date', [$startDate, $endDate])
+        ->selectRaw('date, SUM(sales) as sales, SUM(expenses) as expenses, SUM(orders) as orders' )
         ->groupBy('date')
         ->get();
 
@@ -104,11 +104,12 @@ class UddesignController extends Controller
                     'profit' => $data ? ($data->sales - $data->expenses) : 0
                 ];
                 });
-        $actionRoute = route('general.uddesign.dashboard'); // Dynamically set this based on your logic      
+        $actionRoute = route('general.uddesign.dashboard'); // Dynamically set this based on your logic  
+        $totalOrders = $chartdata->sum('orders');    
         $totalSales = $chartdata->sum('sales');
         $totalProfit = $chartdata->sum('profit');
         $totalExpenses = $chartdata->sum('expenses');
-        return view('general.uddesign.dashboard', compact('chartdata', 'totalSales', 'totalProfit', 'totalExpenses', 'actionRoute'));
+        return view('general.uddesign.dashboard', compact('chartdata', 'totalSales', 'totalProfit', 'totalExpenses','totalOrders', 'actionRoute'));
 
     }
 
@@ -160,8 +161,8 @@ class UddesignController extends Controller
                 $endDate = Carbon::now()->subYear()->endOfYear();
                 break;
             case 'overall':
-                $startDate =  Carbon::parse(FakeData::min('date'));
-                $endDate = Carbon::parse(FakeData::max('date'));
+                $startDate =  Carbon::parse(FakeDataThree::min('date'));
+                $endDate = Carbon::parse(FakeDataThree::max('date'));
                 break;
             case 'custom':
                 $startDate = Carbon::parse($request->input('start_date'));
@@ -174,7 +175,7 @@ class UddesignController extends Controller
         }
 
 
-        $chartdata = FakeData::whereBetween('date', [$startDate, $endDate])
+        $chartdata = FakeDataThree::whereBetween('date', [$startDate, $endDate])
         ->selectRaw('date, SUM(expenses) as expenses')
         ->groupBy('date')
         ->get();
@@ -260,8 +261,8 @@ class UddesignController extends Controller
                 $endDate = Carbon::now()->subYear()->endOfYear();
                 break;
             case 'overall':
-                $startDate =  Carbon::parse(FakeData::min('date'));
-                $endDate = Carbon::parse(FakeData::max('date'));
+                $startDate =  Carbon::parse(FakeDataThree::min('date'));
+                $endDate = Carbon::parse(FakeDataThree::max('date'));
                 break;
             case 'custom':
                 $startDate = Carbon::parse($request->input('start_date'));
@@ -274,7 +275,7 @@ class UddesignController extends Controller
         }
 
 
-        $chartdata = FakeData::whereBetween('date', [$startDate, $endDate])
+        $chartdata = FakeDataThree::whereBetween('date', [$startDate, $endDate])
         ->selectRaw('date, SUM(sales) as sales, SUM(cash) as cash, SUM(gcash) as gcash')
         ->groupBy('date')
         ->get();

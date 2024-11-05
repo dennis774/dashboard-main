@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\KuwagoTwo;
 
-use App\Models\FakeData;
+use App\Models\FakeDataTwo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
@@ -57,8 +57,8 @@ class Kuwago_TwoController extends Controller
                 $endDate = Carbon::now()->subYear()->endOfYear();
                 break;
             case 'overall':
-                $startDate =  Carbon::parse(FakeData::min('date'));
-                $endDate = Carbon::parse(FakeData::max('date'));
+                $startDate =  Carbon::parse(FakeDataTwo::min('date'));
+                $endDate = Carbon::parse(FakeDataTwo::max('date'));
                 break;
             case 'custom':
                 $startDate = Carbon::parse($request->input('start_date'));
@@ -71,8 +71,8 @@ class Kuwago_TwoController extends Controller
         }
 
 
-        $chartdata = FakeData::whereBetween('date', [$startDate, $endDate])
-        ->selectRaw('date, SUM(sales) as sales, SUM(expenses) as expenses' )
+        $chartdata = FakeDataTwo::whereBetween('date', [$startDate, $endDate])
+        ->selectRaw('date, SUM(sales) as sales, SUM(expenses) as expenses,  SUM(orders) as orders')
         ->groupBy('date')
         ->get();
 
@@ -99,16 +99,18 @@ class Kuwago_TwoController extends Controller
 
                  return [
                     'date' => $formattedDate,
+                    'orders' => $data ? $data->orders : 0,
                     'sales' => $data ? $data->sales : 0,
                     'expenses' => $data ? $data->expenses : 0, // Include expenses
                     'profit' => $data ? ($data->sales - $data->expenses) : 0
                 ];
                 });
-        $actionRoute = route('general.kuwago-two.dashboard'); // Dynamically set this based on your logic      
+        $actionRoute = route('general.kuwago-two.dashboard'); // Dynamically set this based on your logic  
+        $totalOrders = $chartdata->sum('orders');    
         $totalSales = $chartdata->sum('sales');
         $totalProfit = $chartdata->sum('profit');
         $totalExpenses = $chartdata->sum('expenses');
-        return view('general.kuwago-two.dashboard', compact('chartdata', 'totalSales', 'totalProfit', 'totalExpenses', 'actionRoute'));
+        return view('general.kuwago-two.dashboard', compact('chartdata', 'totalSales', 'totalProfit', 'totalExpenses','totalOrders', 'actionRoute'));
 
     }
 
@@ -160,8 +162,8 @@ class Kuwago_TwoController extends Controller
                 $endDate = Carbon::now()->subYear()->endOfYear();
                 break;
             case 'overall':
-                $startDate =  Carbon::parse(FakeData::min('date'));
-                $endDate = Carbon::parse(FakeData::max('date'));
+                $startDate =  Carbon::parse(FakeDataTwo::min('date'));
+                $endDate = Carbon::parse(FakeDataTwo::max('date'));
                 break;
             case 'custom':
                 $startDate = Carbon::parse($request->input('start_date'));
@@ -174,7 +176,7 @@ class Kuwago_TwoController extends Controller
         }
 
 
-        $chartdata = FakeData::whereBetween('date', [$startDate, $endDate])
+        $chartdata = FakeDataTwo::whereBetween('date', [$startDate, $endDate])
         ->selectRaw('date, SUM(expenses) as expenses')
         ->groupBy('date')
         ->get();
@@ -260,8 +262,8 @@ class Kuwago_TwoController extends Controller
                 $endDate = Carbon::now()->subYear()->endOfYear();
                 break;
             case 'overall':
-                $startDate =  Carbon::parse(FakeData::min('date'));
-                $endDate = Carbon::parse(FakeData::max('date'));
+                $startDate =  Carbon::parse(FakeDataTwo::min('date'));
+                $endDate = Carbon::parse(FakeDataTwo::max('date'));
                 break;
             case 'custom':
                 $startDate = Carbon::parse($request->input('start_date'));
@@ -274,7 +276,7 @@ class Kuwago_TwoController extends Controller
         }
 
 
-        $chartdata = FakeData::whereBetween('date', [$startDate, $endDate])
+        $chartdata = FakeDataTwo::whereBetween('date', [$startDate, $endDate])
         ->selectRaw('date, SUM(sales) as sales, SUM(cash) as cash, SUM(gcash) as gcash')
         ->groupBy('date')
         ->get();

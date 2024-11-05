@@ -41,33 +41,33 @@ Route::middleware('auth')->group(function () {
     Route::get('/uddesign/sales', [UddesignController::class, 'chart_sales_uddesign'])->name('general.uddesign.sales');
 
     Route::middleware(['auth', 'role:owner'])->group(function(){
-        Route::get('/admin/dashboard', [RoleController::class, 'admin_dashboard'])->name('roles.admin.dashboard');
-        Route::get('/admin/dashboard', [ChartDataController::class, 'index'])->name('roles.admin.dashboard');
+        // Route::get('/admin/dashboard', [RoleController::class, 'admin_dashboard'])->name('roles.admin.dashboard');
+        // Route::get('/admin/dashboard', [ChartDataController::class, 'index'])->name('roles.admin.dashboard');
         
 
-        Route::get('/admin/expenses', [PageController::class, 'expenses_index'])->name('pages.Expenses.index');
-        Route::get('/admin/expenses', [ExpensesController::class, 'chart_expenses_index'])->name('pages.Expenses.index');
+        // Route::get('/admin/expenses', [PageController::class, 'expenses_index'])->name('pages.Expenses.index');
+        // Route::get('/admin/expenses', [ExpensesController::class, 'chart_expenses_index'])->name('pages.Expenses.index');
 
-        Route::get('/admin/feedbacks', [PageController::class, 'feedback_index'])->name('pages.Feedbacks.index');
+        // Route::get('/admin/feedbacks', [PageController::class, 'feedback_index'])->name('pages.Feedbacks.index');
 
-        Route::get('/admin/promos', [PageController::class, 'promo_index'])->name('pages.Promos.index');
+        // Route::get('/admin/promos', [PageController::class, 'promo_index'])->name('pages.Promos.index');
 
-        Route::get('/admin/sales', [PageController::class, 'sales_index'])->name('pages.Sales.index');
-        Route::get('/admin/sales', [SalesController::class, 'chart_sales_index'])->name('pages.Sales.index');
+        // Route::get('/admin/sales', [PageController::class, 'sales_index'])->name('pages.Sales.index');
+        // Route::get('/admin/sales', [SalesController::class, 'chart_sales_index'])->name('pages.Sales.index');
 
         Route::resource('/account', AccountController::class);
     });
 
     Route::middleware(['auth', 'role:general'])->group(function () {
-        Route::get('/general/dashboard', [RoleController::class, 'general_dashboard'])->name('roles.general.dashboard');
+        // Route::get('/general/dashboard', [RoleController::class, 'general_dashboard'])->name('roles.general.dashboard');
     });
 
     Route::middleware(['auth', 'role:kuwago'])->group(function () {
-        Route::get('/kuwago/dashboard', [RoleController::class, 'kuwago_dashboard'])->name('kuwago.dashboard');
+        // Route::get('/kuwago/dashboard', [RoleController::class, 'kuwago_dashboard'])->name('kuwago.dashboard');
     });
     
     Route::middleware(['auth', 'role:uddesign'])->group(function () {
-        Route::get('/uddesign/dashboard', [RoleController::class, 'uddesign_dashboard'])->name('uddesign.dashboard');
+        // Route::get('/uddesign/dashboard', [RoleController::class, 'uddesign_dashboard'])->name('uddesign.dashboard');
     });
 });
 

@@ -28,16 +28,16 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        $url = "dashboard";
+        $url = "/kuwago-one";
 
         if ($request->user()->role === "owner") {
-            $url = "admin/dashboard";
+            $url = "/kuwago-one";
         } else if($request->user()->role === "general"){
-            $url = "general/dashboard";
+            $url = "/kuwago-one";
         } else if($request->user()->role === "kuwago"){
-            $url = "kuwago/dashboard";
+            $url = "/kuwago-one";
         } else if($request->user()->role === "uddesign"){
-            $url = "uddesign/dashboard";
+            $url = "/uddesign";
         }
 
         return redirect()->intended($url);

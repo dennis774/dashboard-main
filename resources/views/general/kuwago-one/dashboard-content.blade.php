@@ -34,7 +34,7 @@
                                     <div class="col-lg-6 card-box">
                                         <i class="fa-solid fa-cart-shopping"></i>
                                         <p>Total Orders</p>
-                                        <p>26</p>
+                                        <p>{{$totalOrders}}</p>
                                     </div>
                                     <div class="col-lg-12 card-box">
                                         <p>Target Sales</p>
