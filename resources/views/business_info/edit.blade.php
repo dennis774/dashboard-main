@@ -1,10 +1,3 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -28,11 +21,11 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label for="business_image">business_image</label>
-                                <input type="file" class="form-control" name="business_image" value="{{ $business_infos->business_image }}" required>
+                                <input type="file" class="form-control" name="business_image" value="{{ $business_infos->business_image }}">
                             </div>
                             <div class="form-group mb-3">
                                 <label for="business_logo">business_logo</label>
-                                <input type="file" class="form-control" name="business_logo" value="{{ $business_infos->business_logo }}" required>
+                                <input type="file" class="form-control" name="business_logo" value="{{ $business_infos->business_logo }}">
                             </div>
                             <div class="form-group mb-3">
                                 <label for="year">Year</label>
@@ -63,4 +56,3 @@
             </div>
         </div>
     </div>
-</x-app-layout>

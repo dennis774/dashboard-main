@@ -25,6 +25,7 @@ class Kuwago_OneController extends Controller
             case 'yesterday':
                 $startDate = Carbon::now()->subDays(1)->startOfDay();
                 $endDate = Carbon::now()->subDays(1)->endOfDay();
+                break;
             case 'last3days':
                 $startDate = Carbon::now()->subDays(3)->startOfDay();
                 $endDate = Carbon::now()->subDays(1)->endOfDay();
@@ -130,6 +131,7 @@ class Kuwago_OneController extends Controller
             case 'yesterday':
                 $startDate = Carbon::now()->subDays(1)->startOfDay();
                 $endDate = Carbon::now()->subDays(1)->endOfDay();
+                break;
             case 'last3days':
                 $startDate = Carbon::now()->subDays(3)->startOfDay();
                 $endDate = Carbon::now()->subDays(1)->endOfDay();
@@ -230,6 +232,7 @@ class Kuwago_OneController extends Controller
             case 'yesterday':
                 $startDate = Carbon::now()->subDays(1)->startOfDay();
                 $endDate = Carbon::now()->subDays(1)->endOfDay();
+                break;
             case 'last3days':
                 $startDate = Carbon::now()->subDays(3)->startOfDay();
                 $endDate = Carbon::now()->subDays(1)->endOfDay();

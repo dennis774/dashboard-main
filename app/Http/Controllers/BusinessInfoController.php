@@ -54,15 +54,28 @@ class BusinessInfoController extends Controller
     public function update(Request $request, string $id)
     {
         $data = BusinessInfo::findOrFail($id);
-        $validatedData = $request->validate([
+        $rules = [
             'business_name' => 'required|string',
-            'business_logo' => 'required|image',
-            'business_image' => 'required|image',
+            'business_logo' => 'nullable|image',
+            'business_image' => 'nullable|image',
             'year' => 'required|integer',
             'business_type' => 'required|string',
             'location' => 'required|string',
             'description' => 'required|string',
-        ]);
+        ];
+
+        if (!$data->business_logo) {
+            // Only require image if none exists
+            $rules['business_logo'] = 'required|image';
+        }
+
+        if (!$data->business_image) {
+            // Only require image if none exists
+            $rules['business_image'] = 'required|image';
+        }
+    
+        $validatedData = $request->validate($rules);
+
         if ($request->hasFile('business_image')) {
             $fileName = time() . $request->file('business_image')->getClientOriginalName();
             $request->file('business_image')->move(public_path('business_images'), $fileName);
