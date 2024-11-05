@@ -3,7 +3,7 @@
     <div class="container text-center">
         <div class="row pt-5 pb-5">
             <div class="col-lg-2">
-                <a href="{{ url('admin/dashboard') }}"><i class="fa-solid fa-arrow-left fa-xl"></i></a>
+                <a href="{{ url('/kuwago-one') }}"><i class="fa-solid fa-arrow-left fa-xl"></i></a>
             </div>
             <div class="col-lg-8">
                 <h3 style="">Accounts</h3>
