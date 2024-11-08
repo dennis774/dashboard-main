@@ -23,7 +23,7 @@
         </div>
 
         <div class="col-lg-2">
-            <i class="fas fa-filter filter-icon" onclick="updateChartWithFilter()"></i>
+            
         </div>
     </div>
 
@@ -32,6 +32,7 @@
             <h5>Select Date Range</h5>
             <form action="{{$actionRoute}}" method="GET">
                 @csrf
+                <input type="hidden" name="interval" value="custom">
                 <div class="form-group mb-3">
                     <label for="start_date" class="form-label text-white">Start Date:</label>
                     <input type="date" id="start_date" name="start_date" class="form-control" value="{{ request('start_date', \Carbon\Carbon::now()->subDays(6)->toDateString()) }}" required />

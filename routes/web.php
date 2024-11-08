@@ -7,6 +7,7 @@ use App\Http\Controllers\BusinessInfoController;
 use App\Http\Controllers\Uddesign\UddesignController;
 use App\Http\Controllers\KuwagoOne\Kuwago_OneController;
 use App\Http\Controllers\KuwagoTwo\Kuwago_TwoController;
+use App\Http\Controllers\UserAccountController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -15,6 +16,13 @@ Route::get('/', function () {
 Route::get('/kuwago-one', function () {
     return view('general.kuwago-one.dashboard');
 })->middleware(['auth', 'verified'])->name('general.kuwago-one.dashboard');
+
+Route::middleware(['auth', 'ensureUserIsAuthorized'])->group(function () {
+    Route::get('/settings/{id}', [UserAccountController::class, 'show'])->name('settings.account-show');
+    Route::get('/settings/{id}/edit', [UserAccountController::class, 'edit'])->name('settings.account-edit');
+    Route::put('/settings/{id}', [UserAccountController::class, 'update'])->name('settings.account-update');
+});
+
 
 Route::middleware(['auth', 'kuwagoRole:owner,general,kuwago'])->group(function () {
     Route::get('/kuwago-one', [Kuwago_OneController::class, 'general_kuwago_one'])->name('general.kuwago-one.dashboard');

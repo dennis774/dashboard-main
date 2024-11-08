@@ -127,3 +127,107 @@ i {
     height: 50px;
     width: 50px;
 }
+
+/* business style */
+
+.businessesCard {
+    background-color: #fff; /* Sets a white background for the container */
+    padding: 20px; /* Optional: Adds padding */
+    border-radius: 10px; /* Optional: Rounds the corners */
+}
+div.businessName{
+    font-weight: bold;
+}
+img.logos{
+    width: 70px;
+    height: 70px;
+ }
+
+
+
+
+img.businesses{
+    width: 200px;
+    height: 125px;
+    border-radius: 10px;
+}
+
+
+p.businessSections{
+    font-weight: bold;
+}
+input.editBusiness {
+    color:#000;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    width: 100%;
+}
+textarea.businessIndexDesc {
+    height: 100px;
+    width: 100%;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    border: none;
+}
+
+
+textarea.businessIndexDesc::-webkit-scrollbar {
+    display: none;
+}
+button.updateBusiness{
+    background: none;
+    border: none;
+    font-size: 20px;
+}
+ 
+a.backtoIndex{
+    color: #fff;
+    font-size: 20px;
+    text-decoration: none;
+ }
+
+/*  */
+
+a.addBusinessbutton{
+    color: #fff;
+    font-size: 20px;
+    text-decoration: none;
+ }
+.businessesCard {
+    background-color: #fff; /* Sets a white background for the container */
+    padding: 20px; /* Optional: Adds padding */
+    border-radius: 10px; /* Optional: Rounds the corners */
+}
+div.businessName{
+    font-weight: bold;
+}
+img.logos{
+    width: 70px;
+    height: 70px;
+ }
+img.businesses{
+    width: 200px;
+    height: 125px;
+    border-radius: 10px;
+}
+p.businessSections{
+    font-weight: bold;
+}
+div.businessIndexDesc {
+    height: 90px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+
+div.businessIndexDesc::-webkit-scrollbar {
+    display: none;
+}
+button.businessDelete{
+    color: #000;
+    font-size: 20px;
+    text-decoration: none;
+    border: none;
+    background: none;
+ }

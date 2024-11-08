@@ -29,7 +29,9 @@
                         <div>
                             <a href="{{url('/business')}}" class="mx-2"><i class="fa-solid fa-store"></i></a>
                             <a href="{{url('/account')}}" class="mx-2"><i class="fa-solid fa-user"></i></a>
-                            <a href="#" class="mx-2"><i class="fa-solid fa-gear"></i></a>
+                            <a href="{{ route('settings.account-show', ['id' => Auth::user()->id]) }}" class="mx-2">
+                                <i class="fa-solid fa-gear"></i>
+                            </a>                            
                             @if (Auth::check())
                             <a href="{{ route('logout') }}" class="mx-2" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
