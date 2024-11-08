@@ -9,316 +9,186 @@ use App\Http\Controllers\Controller;
 
 class Kuwago_TwoController extends Controller
 {
-    // for dashboard
+    // for /kuwago-two
     public function general_kuwago_two(Request $request)
     {
-        $interval = $request->input('interval','thisweek');
-        $startDate = Carbon::now();
-        $endDate = Carbon::now();
+        $interval = $request->input('interval', 'thisweek');
+        $dates = $this->getDateRange($interval, $request);
 
+        $chartdata = FakeDataTwo::whereBetween('date', [$dates['start'], $dates['end']])
+            ->selectRaw(
+                '
+                    ' .
+                    ($interval === 'overall' ? 'YEAR(date)' : ($interval === 'thisyear' || $interval === 'lastyear' ? 'DATE_FORMAT(date, "%Y-%m")' : 'date')) .
+                    ' as period,
+                    SUM(sales) as sales, SUM(expenses) as expenses, SUM(orders) as orders
+                '
+            )
+            ->groupBy('period')
+            ->get()
+            ->map(function ($item) use ($interval) {
+                $item->orders = $item->orders;
+                $item->date = $this->formatDate($interval, $item->period);
+                $item->profit = $item->sales - $item->expenses;
+                return $item;
+            });
 
-        switch ($interval) {
-            case 'today':
-                $startDate = Carbon::now()->startOfDay();
-                $endDate = Carbon::now()->endOfDay();
-                break;
-            case 'yesterday':
-                $startDate = Carbon::now()->subDays(1)->startOfDay();
-                $endDate = Carbon::now()->subDays(1)->endOfDay();
-                break;
-            case 'last3days':
-                $startDate = Carbon::now()->subDays(3)->startOfDay();
-                $endDate = Carbon::now()->subDays(1)->endOfDay();
-                break;
-            case 'last5days':
-                $startDate = Carbon::now()->subDays(5)->startOfDay();
-                $endDate = Carbon::now()->subDays(1)->endOfDay();
-                break;
-            case 'lastweek':
-                $startDate = Carbon::now()->subWeek()->startOfWeek();
-                $endDate = Carbon::now()->subWeek()->endOfWeek();
-                break;
-            case 'thisweek':
-                $startDate = Carbon::now()->startOfWeek();
-                $endDate = Carbon::now()->endOfWeek();
-                break;
-            case 'thismonth':
-                $startDate = Carbon::now()->startOfMonth();
-                $endDate = Carbon::now()->endOfMonth();
-                break;
-            case 'lastmonth':
-                $startDate = Carbon::now()->subMonth()->startOfMonth();
-                $endDate = Carbon::now()->subMonth()->endOfMonth();
-                break;
-            case 'thisyear':
-                $startDate = Carbon::now()->startOfYear();
-                $endDate = Carbon::now()->endOfYear();
-                break;
-            case 'lastyear':
-                $startDate = Carbon::now()->subYear()->startOfYear();
-                $endDate = Carbon::now()->subYear()->endOfYear();
-                break;
-            case 'overall':
-                $startDate =  Carbon::parse(FakeDataTwo::min('date'));
-                $endDate = Carbon::parse(FakeDataTwo::max('date'));
-                break;
-            case 'custom':
-                $startDate = Carbon::parse($request->input('start_date'));
-                $endDate = Carbon::parse($request->input('end_date'));
-                break;
-            default:
-                $startDate = Carbon::parse($request->input('start_date'));
-                $endDate = Carbon::parse($request->input('end_date'));
-                break;
-        }
-
-
-        $chartdata = FakeDataTwo::whereBetween('date', [$startDate, $endDate])
-        ->selectRaw('date, SUM(sales) as sales, SUM(expenses) as expenses,  SUM(orders) as orders')
-        ->groupBy('date')
-        ->get();
-
-
-        // Ensure all dates in the range have a value
-        $allDates = collect();
-        $current = $startDate->copy();
-        while ($current->lte($endDate)) {
-            $allDates->push($current->copy());
-            $current->addDay();
-        }
-            // Merge fetched data with all dates, filling gaps with 0 sales
-            $chartdata = $allDates->map(function($date) use ($chartdata, $interval) {
-                 $data = $chartdata->firstWhere('date', $date->toDateString());
-
-
-                 $formattedDate = $date->toDateString();
-                 if (in_array($interval, ['last3days', 'last5days', 'last7days', 'thisweek', 'lastweek'])) {
-                     $formattedDate = $date->format('l'); // Day format
-                 } elseif (in_array($interval, ['thisyear', 'lastyear'])) {
-                     $formattedDate = $date->format('F'); // Month format
-                 } // Date format for other cases remains as YYYY-MM-DD
-
-
-                 return [
-                    'date' => $formattedDate,
-                    'orders' => $data ? $data->orders : 0,
-                    'sales' => $data ? $data->sales : 0,
-                    'expenses' => $data ? $data->expenses : 0, // Include expenses
-                    'profit' => $data ? ($data->sales - $data->expenses) : 0
-                ];
-                });
-        $actionRoute = route('general.kuwago-two.dashboard'); // Dynamically set this based on your logic  
-        $totalOrders = $chartdata->sum('orders');    
+        $actionRoute = route('general.kuwago-two.dashboard');
         $totalSales = $chartdata->sum('sales');
         $totalProfit = $chartdata->sum('profit');
         $totalExpenses = $chartdata->sum('expenses');
-        return view('general.kuwago-two.dashboard', compact('chartdata', 'totalSales', 'totalProfit', 'totalExpenses','totalOrders', 'actionRoute'));
+        $totalOrders = $chartdata->sum('orders');
 
+        return view('general.kuwago-two.dashboard', compact('actionRoute', 'chartdata', 'totalSales', 'totalProfit', 'totalExpenses', 'totalOrders'));
     }
-    // for expenses
-    public function chart_expenses_kuwago_two(Request $request)
-    {
-        $interval = $request->input('interval','thisweek');
-        $startDate = Carbon::now();
-        $endDate = Carbon::now();
-
-
-        switch ($interval) {
-            case 'today':
-                $startDate = Carbon::now()->startOfDay();
-                $endDate = Carbon::now()->endOfDay();
-                break;
-            case 'yesterday':
-                $startDate = Carbon::now()->subDays(1)->startOfDay();
-                $endDate = Carbon::now()->subDays(1)->endOfDay();
-                break;
-            case 'last3days':
-                $startDate = Carbon::now()->subDays(3)->startOfDay();
-                $endDate = Carbon::now()->subDays(1)->endOfDay();
-                break;
-            case 'last5days':
-                $startDate = Carbon::now()->subDays(5)->startOfDay();
-                $endDate = Carbon::now()->subDays(1)->endOfDay();
-                break;
-            case 'lastweek':
-                $startDate = Carbon::now()->subWeek()->startOfWeek();
-                $endDate = Carbon::now()->subWeek()->endOfWeek();
-                break;
-            case 'thisweek':
-                $startDate = Carbon::now()->startOfWeek();
-                $endDate = Carbon::now()->endOfWeek();
-                break;
-            case 'thismonth':
-                $startDate = Carbon::now()->startOfMonth();
-                $endDate = Carbon::now()->endOfMonth();
-                break;
-            case 'lastmonth':
-                $startDate = Carbon::now()->subMonth()->startOfMonth();
-                $endDate = Carbon::now()->subMonth()->endOfMonth();
-                break;
-            case 'thisyear':
-                $startDate = Carbon::now()->startOfYear();
-                $endDate = Carbon::now()->endOfYear();
-                break;
-            case 'lastyear':
-                $startDate = Carbon::now()->subYear()->startOfYear();
-                $endDate = Carbon::now()->subYear()->endOfYear();
-                break;
-            case 'overall':
-                $startDate =  Carbon::parse(FakeDataTwo::min('date'));
-                $endDate = Carbon::parse(FakeDataTwo::max('date'));
-                break;
-            case 'custom':
-                $startDate = Carbon::parse($request->input('start_date'));
-                $endDate = Carbon::parse($request->input('end_date'));
-                break;
-            default:
-                $startDate = Carbon::parse($request->input('start_date'));
-                $endDate = Carbon::parse($request->input('end_date'));
-                break;
-        }
-
-
-        $chartdata = FakeDataTwo::whereBetween('date', [$startDate, $endDate])
-        ->selectRaw('date, SUM(expenses) as expenses')
-        ->groupBy('date')
-        ->get();
-
-
-        // Ensure all dates in the range have a value
-        $allDates = collect();
-        $current = $startDate->copy();
-        while ($current->lte($endDate)) {
-            $allDates->push($current->copy());
-            $current->addDay();
-        }
-            // Merge fetched data with all dates, filling gaps with 0 sales
-            $chartdata = $allDates->map(function($date) use ($chartdata, $interval) {
-                 $data = $chartdata->firstWhere('date', $date->toDateString());
-
-
-                 $formattedDate = $date->toDateString();
-                 if (in_array($interval, ['last3days', 'last5days', 'last7days', 'thisweek', 'lastweek'])) {
-                     $formattedDate = $date->format('l'); // Day format
-                 } elseif (in_array($interval, ['thisyear', 'lastyear'])) {
-                     $formattedDate = $date->format('F'); // Month format
-                 } // Date format for other cases remains as YYYY-MM-DD
-
-
-                 return [
-                    'date' => $formattedDate,
-                    'expenses' => $data ? $data->expenses : 0,
-                ];
-                });
-                
-        $actionRoute = route('general.kuwago-two.expenses'); // Dynamically set this based on your logic      
-        $totalExpenses = $chartdata->sum('expenses');
-        return view('general.kuwago-two.expenses', compact('chartdata', 'totalExpenses', 'actionRoute'));
-
-    }
-    // for sales
+    // for /kuwago-two/sales
     public function chart_sales_kuwago_two(Request $request)
     {
-        $interval = $request->input('interval','thisweek');
-        $startDate = Carbon::now();
-        $endDate = Carbon::now();
+        $interval = $request->input('interval', 'thisweek');
+        $dates = $this->getDateRange($interval, $request);
 
+        $chartdata = FakeDataTwo::whereBetween('date', [$dates['start'], $dates['end']])
+            ->selectRaw(
+                '
+                    ' .
+                    ($interval === 'overall' ? 'YEAR(date)' : ($interval === 'thisyear' || $interval === 'lastyear' ? 'DATE_FORMAT(date, "%Y-%m")' : 'date')) .
+                    ' as period,
+                    SUM(sales) as sales, SUM(gcash) as gcash, SUM(cash) as cash
+                '
+            )
+            ->groupBy('period')
+            ->get()
+            ->map(function ($item) use ($interval) {
+                $item->date = $this->formatDate($interval, $item->period);
+                $item->sales = $item->sales;
+                $item->gcash = $item->gcash;
+                $item->cash = $item->cash;
+                return $item;
+            });
 
-        switch ($interval) {
-            case 'today':
-                $startDate = Carbon::now()->startOfDay();
-                $endDate = Carbon::now()->endOfDay();
-                break;
-            case 'yesterday':
-                $startDate = Carbon::now()->subDays(1)->startOfDay();
-                $endDate = Carbon::now()->subDays(1)->endOfDay();
-                break;
-            case 'last3days':
-                $startDate = Carbon::now()->subDays(3)->startOfDay();
-                $endDate = Carbon::now()->subDays(1)->endOfDay();
-                break;
-            case 'last5days':
-                $startDate = Carbon::now()->subDays(5)->startOfDay();
-                $endDate = Carbon::now()->subDays(1)->endOfDay();
-                break;
-            case 'lastweek':
-                $startDate = Carbon::now()->subWeek()->startOfWeek();
-                $endDate = Carbon::now()->subWeek()->endOfWeek();
-                break;
-            case 'thisweek':
-                $startDate = Carbon::now()->startOfWeek();
-                $endDate = Carbon::now()->endOfWeek();
-                break;
-            case 'thismonth':
-                $startDate = Carbon::now()->startOfMonth();
-                $endDate = Carbon::now()->endOfMonth();
-                break;
-            case 'lastmonth':
-                $startDate = Carbon::now()->subMonth()->startOfMonth();
-                $endDate = Carbon::now()->subMonth()->endOfMonth();
-                break;
-            case 'thisyear':
-                $startDate = Carbon::now()->startOfYear();
-                $endDate = Carbon::now()->endOfYear();
-                break;
-            case 'lastyear':
-                $startDate = Carbon::now()->subYear()->startOfYear();
-                $endDate = Carbon::now()->subYear()->endOfYear();
-                break;
-            case 'overall':
-                $startDate =  Carbon::parse(FakeDataTwo::min('date'));
-                $endDate = Carbon::parse(FakeDataTwo::max('date'));
-                break;
-            case 'custom':
-                $startDate = Carbon::parse($request->input('start_date'));
-                $endDate = Carbon::parse($request->input('end_date'));
-                break;
-            default:
-                $startDate = Carbon::parse($request->input('start_date'));
-                $endDate = Carbon::parse($request->input('end_date'));
-                break;
-        }
-
-
-        $chartdata = FakeDataTwo::whereBetween('date', [$startDate, $endDate])
-        ->selectRaw('date, SUM(sales) as sales, SUM(cash) as cash, SUM(gcash) as gcash')
-        ->groupBy('date')
-        ->get();
-
-
-        // Ensure all dates in the range have a value
-        $allDates = collect();
-        $current = $startDate->copy();
-        while ($current->lte($endDate)) {
-            $allDates->push($current->copy());
-            $current->addDay();
-        }
-            // Merge fetched data with all dates, filling gaps with 0 sales
-            $chartdata = $allDates->map(function($date) use ($chartdata, $interval) {
-                 $data = $chartdata->firstWhere('date', $date->toDateString());
-
-
-                 $formattedDate = $date->toDateString();
-                 if (in_array($interval, ['last3days', 'last5days', 'last7days', 'thisweek', 'lastweek'])) {
-                     $formattedDate = $date->format('l'); // Day format
-                 } elseif (in_array($interval, ['thisyear', 'lastyear'])) {
-                     $formattedDate = $date->format('F'); // Month format
-                 } // Date format for other cases remains as YYYY-MM-DD
-
-
-                 return [
-                    'date' => $formattedDate,
-                    'sales' => $data ? $data->sales : 0,
-                    'cash' => $data ? $data->cash : 0,
-                    'gcash' => $data ? $data->gcash : 0,
-                ];
-                });
-                
-        $actionRoute = route('general.kuwago-two.sales'); // Dynamically set this based on your logic      
+        $actionRoute = route('general.kuwago-two.sales');
         $totalSales = $chartdata->sum('sales');
         $totalGcash = $chartdata->sum('gcash');
         $totalCash = $chartdata->sum('cash');
         return view('general.kuwago-two.sales', compact('chartdata', 'totalSales', 'totalGcash', 'totalCash', 'actionRoute'));
+    }
+    // for /kuwago-two/expenses
+    public function chart_expenses_kuwago_two(Request $request)
+    {
+        $interval = $request->input('interval', 'thisweek');
+        $dates = $this->getDateRange($interval, $request);
 
+        $chartdata = FakeDataTwo::whereBetween('date', [$dates['start'], $dates['end']])
+            ->selectRaw(
+                '
+                    ' .
+                    ($interval === 'overall' ? 'YEAR(date)' : ($interval === 'thisyear' || $interval === 'lastyear' ? 'DATE_FORMAT(date, "%Y-%m")' : 'date')) .
+                    ' as period,
+                    SUM(expenses) as expenses
+                '
+            )
+            ->groupBy('period')
+            ->get()
+            ->map(function ($item) use ($interval) {
+                $item->date = $this->formatDate($interval, $item->period);
+                $item->expenses = $item->expenses;
+                return $item;
+            });
+
+        $actionRoute = route('general.kuwago-two.expenses');
+        $totalExpenses = $chartdata->sum('expenses');
+
+        return view('general.kuwago-two.expenses', compact('actionRoute', 'chartdata', 'totalExpenses'));
+    }
+    // for This method changes the format of the date for display purposes, ensuring the date is presented correctly based on the interval.
+    private function formatDate($interval, $period)
+    {
+        if ($interval === 'overall') {
+            return $period;
+        }
+
+        if ($interval === 'thisyear' || $interval === 'lastyear') {
+            return Carbon::parse($period)->format('F');
+        }
+
+        if (in_array($interval, ['today', 'yesterday', 'last3days', 'last5days', 'last7days', 'thisweek', 'lastweek'])) {
+            return Carbon::parse($period)->format('l');
+        }
+
+        return Carbon::parse($period)->toDateString();
+    }
+    //This method filters the data by providing the start and end dates based on the selected interval.
+    private function getDateRange($interval, $request)
+    {
+        switch ($interval) {
+            case 'today':
+                return ['start' => Carbon::now()->startOfDay(), 'end' => Carbon::now()->endOfDay()];
+            case 'yesterday':
+                return [
+                    'start' => Carbon::now()
+                        ->subDays(1)
+                        ->startOfDay(),
+                    'end' => Carbon::now()
+                        ->subDays(1)
+                        ->endOfDay(),
+                ];
+            case 'last3days':
+                return [
+                    'start' => Carbon::now()
+                        ->subDays(3)
+                        ->startOfDay(),
+                    'end' => Carbon::now()
+                        ->subDays(1)
+                        ->endOfDay(),
+                ];
+            case 'last5days':
+                return [
+                    'start' => Carbon::now()
+                        ->subDays(5)
+                        ->startOfDay(),
+                    'end' => Carbon::now()
+                        ->subDays(1)
+                        ->endOfDay(),
+                ];
+            case 'lastweek':
+                return [
+                    'start' => Carbon::now()
+                        ->subWeek()
+                        ->startOfWeek(),
+                    'end' => Carbon::now()
+                        ->subWeek()
+                        ->endOfWeek(),
+                ];
+            case 'thisweek':
+                return ['start' => Carbon::now()->startOfWeek(), 'end' => Carbon::now()->endOfWeek()];
+            case 'thismonth':
+                return ['start' => Carbon::now()->startOfMonth(), 'end' => Carbon::now()->endOfMonth()];
+            case 'lastmonth':
+                return [
+                    'start' => Carbon::now()
+                        ->subMonth()
+                        ->startOfMonth(),
+                    'end' => Carbon::now()
+                        ->subMonth()
+                        ->endOfMonth(),
+                ];
+            case 'thisyear':
+                return ['start' => Carbon::now()->startOfYear(), 'end' => Carbon::now()->endOfYear()];
+            case 'lastyear':
+                return [
+                    'start' => Carbon::now()
+                        ->subYear()
+                        ->startOfYear(),
+                    'end' => Carbon::now()
+                        ->subYear()
+                        ->endOfYear(),
+                ];
+            case 'overall':
+                return ['start' => Carbon::parse(FakeDataTwo::min('date')), 'end' => Carbon::parse(FakeDataTwo::max('date'))];
+            case 'custom':
+                return ['start' => Carbon::parse($request->input('start_date')), 'end' => Carbon::parse($request->input('end_date'))];
+            default:
+                return ['start' => Carbon::parse($request->input('start_date')), 'end' => Carbon::parse($request->input('end_date'))];
+        }
     }
 }
