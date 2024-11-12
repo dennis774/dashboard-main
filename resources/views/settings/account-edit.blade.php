@@ -35,7 +35,7 @@
                         </ul>
                     </div>
                     @endif
-                    <form method="POST" action="{{url('/account', $user->id)}}" enctype="multipart/form-data">
+                    <form method="POST" action="{{url('/settings', $user->id)}}" enctype="multipart/form-data">
                         @csrf @method('PUT')
                         <div class="container">
                             <div class="row">

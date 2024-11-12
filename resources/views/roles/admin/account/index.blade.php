@@ -3,13 +3,13 @@
     <div class="container text-center">
         <div class="row pt-5 pb-5">
             <div class="col-lg-2">
-                <a href="{{ url('/kuwago-one') }}"><i class="fa-solid fa-arrow-left fa-xl"></i></a>
+                <a href="{{ route('general.kuwago-one.dashboard') }}"><i class="fa-solid fa-arrow-left fa-xl"></i></a>
             </div>
             <div class="col-lg-8">
-                <h3 style="">Accounts</h3>
+                <h3>Accounts</h3>
             </div>
             <div class="col-lg-2">
-                <a href="{{ url('account/create') }}"><i class="fa-solid fa-plus fa-xl"></i></a>
+                <a href="{{ route('account.create') }}"><i class="fa-solid fa-plus fa-xl"></i></a>
             </div>
         </div>
     </div>
@@ -32,8 +32,7 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="col-lg-3 text-center">
-                                        <!-- Dummy image -->
-                                        <img src="https://via.placeholder.com/80" alt="User Image" class="user-image" />
+                                        <img src="{{ asset('user_images/' . $user->user_image) }}" alt="User Image" width="100">
                                     </div>
                                     <div class="col-lg-9">
                                         <div class="container">
@@ -55,10 +54,11 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="col-lg-6">
-                                        <a href="{{ url('/account', $user->id) }}/edit">
+                                        <a href="{{ route('account.show', ['account' => $user->id]) }}">
                                             <i class="fa-regular fa-pen-to-square fa-xl"></i>
                                         </a>
                                     </div>
+                                    
                                     <div class="col-lg-6 delete-button">
                                         @if ($user->role == 'owner')
                                         <form action="{{ url('/account', $user->id)}}" method="post" style="display: inline-block;">

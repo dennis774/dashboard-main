@@ -7,7 +7,7 @@
                 <a href="{{ url('/account') }}"><i class="fa-solid fa-arrow-left fa-xl"></i></a>
             </div>
             <div class="col-lg-8">
-                <h3 style="">Create New User</h3>
+                <h3>Create New User</h3>
             </div>
             <div class="col-lg-2"></div>
         </div>

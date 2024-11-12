@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\KuwagoOne;
 
+use App\Models\User;
 use App\Models\FakeData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -33,13 +34,38 @@ class Kuwago_OneController extends Controller
                 return $item;
             });
 
-        $actionRoute = route('general.kuwago-one.dashboard');
+        $currentWeekStart = Carbon::now()->startOfWeek();
+        $currentWeekEnd = Carbon::now()->endOfWeek();
+        $currentWeekData = FakeData::whereBetween('date', [$currentWeekStart, $currentWeekEnd])->get();
+        $thisWeekSales = $currentWeekData->sum('sales');
+        $thisWeekExpenses = $currentWeekData->sum('expenses');
+        $thisWeekOrders = $currentWeekData->sum('orders');
+        $thisWeekProfit = $thisWeekSales - $thisWeekExpenses;
+
+        $lastWeekStart = Carbon::now()->subWeek()->startOfWeek();
+        $lastWeekEnd = Carbon::now()->subWeek()->endOfWeek();
+        $lastWeekData = FakeData::whereBetween('date', [$lastWeekStart, $lastWeekEnd])->get();
+        $lastWeekSales = $lastWeekData->sum('sales');
+        $lastWeekExpenses = $lastWeekData->sum('expenses');
+        $lastWeekOrders = $lastWeekData->sum('orders');
+        $lastWeekProfit = $lastWeekSales - $lastWeekExpenses;
+
         $totalSales = $chartdata->sum('sales');
         $totalProfit = $chartdata->sum('profit');
         $totalExpenses = $chartdata->sum('expenses');
         $totalOrders = $chartdata->sum('orders');
 
-        return view('general.kuwago-one.dashboard', compact('actionRoute', 'chartdata', 'totalSales', 'totalProfit', 'totalExpenses', 'totalOrders'));
+        $actionRoute = route('general.kuwago-one.dashboard');
+        $totals = compact('totalSales', 'totalProfit', 'totalExpenses', 'totalOrders');
+        $thisWeek = compact('thisWeekSales', 'thisWeekProfit', 'thisWeekExpenses', 'thisWeekOrders');
+        $lastWeek = compact('lastWeekSales', 'lastWeekProfit', 'lastWeekExpenses', 'lastWeekOrders');
+
+        return view('general.kuwago-one.dashboard', array_merge(
+            compact('actionRoute', 'chartdata'), 
+            $totals, 
+            $thisWeek, 
+            $lastWeek
+        ));
     }
     // for /kuwago-one/sales
     public function chart_sales_kuwago_one(Request $request)

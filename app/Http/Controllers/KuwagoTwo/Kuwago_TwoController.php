@@ -18,11 +18,11 @@ class Kuwago_TwoController extends Controller
         $chartdata = FakeDataTwo::whereBetween('date', [$dates['start'], $dates['end']])
             ->selectRaw(
                 '
-                    ' .
+                ' .
                     ($interval === 'overall' ? 'YEAR(date)' : ($interval === 'thisyear' || $interval === 'lastyear' ? 'DATE_FORMAT(date, "%Y-%m")' : 'date')) .
                     ' as period,
-                    SUM(sales) as sales, SUM(expenses) as expenses, SUM(orders) as orders
-                '
+                SUM(sales) as sales, SUM(expenses) as expenses, SUM(orders) as orders
+            '
             )
             ->groupBy('period')
             ->get()
@@ -33,13 +33,38 @@ class Kuwago_TwoController extends Controller
                 return $item;
             });
 
-        $actionRoute = route('general.kuwago-two.dashboard');
+        $currentWeekStart = Carbon::now()->startOfWeek();
+        $currentWeekEnd = Carbon::now()->endOfWeek();
+        $currentWeekData = FakeDataTwo::whereBetween('date', [$currentWeekStart, $currentWeekEnd])->get();
+        $thisWeekSales = $currentWeekData->sum('sales');
+        $thisWeekExpenses = $currentWeekData->sum('expenses');
+        $thisWeekOrders = $currentWeekData->sum('orders');
+        $thisWeekProfit = $thisWeekSales - $thisWeekExpenses;
+
+        $lastWeekStart = Carbon::now()->subWeek()->startOfWeek();
+        $lastWeekEnd = Carbon::now()->subWeek()->endOfWeek();
+        $lastWeekData = FakeDataTwo::whereBetween('date', [$lastWeekStart, $lastWeekEnd])->get();
+        $lastWeekSales = $lastWeekData->sum('sales');
+        $lastWeekExpenses = $lastWeekData->sum('expenses');
+        $lastWeekOrders = $lastWeekData->sum('orders');
+        $lastWeekProfit = $lastWeekSales - $lastWeekExpenses;
+
         $totalSales = $chartdata->sum('sales');
         $totalProfit = $chartdata->sum('profit');
         $totalExpenses = $chartdata->sum('expenses');
         $totalOrders = $chartdata->sum('orders');
 
-        return view('general.kuwago-two.dashboard', compact('actionRoute', 'chartdata', 'totalSales', 'totalProfit', 'totalExpenses', 'totalOrders'));
+        $actionRoute = route('general.kuwago-two.dashboard');
+        $totals = compact('totalSales', 'totalProfit', 'totalExpenses', 'totalOrders');
+        $thisWeek = compact('thisWeekSales', 'thisWeekProfit', 'thisWeekExpenses', 'thisWeekOrders');
+        $lastWeek = compact('lastWeekSales', 'lastWeekProfit', 'lastWeekExpenses', 'lastWeekOrders');
+
+        return view('general.kuwago-two.dashboard', array_merge(
+            compact('actionRoute', 'chartdata'), 
+            $totals, 
+            $thisWeek, 
+            $lastWeek
+        ));
     }
     // for /kuwago-two/sales
     public function chart_sales_kuwago_two(Request $request)

@@ -63,7 +63,12 @@ class UserAccountController extends Controller
         
         $user->update($validatedData);
 
-        return redirect()->to('/settings')->with('success', 'updated my account successfully.');
+        // Assuming you have the user's ID stored in a variable, e.g., $userId
+        $userId = $user->id;
+
+        return redirect()->route('settings.account-show', ['id' => $userId])->with('success', 'Updated my account successfully.');
+
+
         
     }
 }

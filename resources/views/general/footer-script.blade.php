@@ -16,4 +16,5 @@
     function closeModal() {
         document.getElementById("customDateModal").style.display = "none";
     }
+
 </script>

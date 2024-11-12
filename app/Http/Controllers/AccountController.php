@@ -14,11 +14,8 @@ class AccountController extends Controller
      */
     public function index()
     {
-        // $users = User::with('role')->paginate(10);  // Fetch users with their roles
-        // return view('admin.account.index', compact('users'));
-
-        $data['users'] = User::all();
-        return view('roles.admin.account.index', $data);
+        $user['users'] = User::all();
+        return view('general.kuwago-one.dashboard', $user);
     }
 
     /**
@@ -52,8 +49,7 @@ class AccountController extends Controller
             'password' => Hash::make($request->password),
             'role' => $request->role,
         ]);
-        // return redirect()->route('admin.account.index')->with('success', 'User created successfully.');
-        return redirect()->to('/account')->with('success', 'User created successfully.');
+        return redirect()->route('account.index')->with('success', 'User created successfully.');
     }
 
     /**
@@ -61,8 +57,11 @@ class AccountController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        return view('roles.admin.account.show', compact('user'));
     }
+
 
     /**
      * Show the form for editing the specified resource.

@@ -80,7 +80,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-4 mt-4">
-                        <a href="{{url('admin/dashboard')}}" class="addBusinessbutton d-flex justify-content-start">
+                        <a href="{{ route('general.kuwago-one.dashboard') }}" class="addBusinessbutton d-flex justify-content-start">
                             <i class="fa-solid fa-arrow-left"></i>
                         </a>
                     </div>

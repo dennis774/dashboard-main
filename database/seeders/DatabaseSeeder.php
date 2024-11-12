@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\FakeData;
+use App\Models\FakeDataMerch;
 use App\Models\FakeDataThree;
 use App\Models\FakeDataTwo;
 use Illuminate\Database\Seeder;
@@ -26,5 +27,6 @@ class DatabaseSeeder extends Seeder
         FakeData::factory()->Count(1000)->create();
         FakeDataThree::factory()->Count(1000)->create();
         FakeDataTwo::factory()->Count(1000)->create();
+        FakeDataMerch::factory()->Count(1000)->create();
     }
 }

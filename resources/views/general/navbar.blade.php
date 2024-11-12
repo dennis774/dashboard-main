@@ -3,10 +3,14 @@
     <div class="row">
         <div class="col-lg-2"></div>
         <div class="col-lg-8 nav-bar">
-            <div style="container">
+            <div class="container">
                 <div class="row">
                     <div class="col-lg-4">
-                        <img src="https://via.placeholder.com/80" class="user-image" />
+                    @if(Auth::check() && Auth::user()->user_image)
+                        <img src="{{ asset('user_images/' . Auth::user()->user_image) }}" alt="User Image" width="50" height="50" style="border-radius: 50%;">
+                    @else
+                        <img src="https://via.placeholder.com/80" alt="Default User Image" width="50" height="50" style="border-radius: 50%;">
+                    @endif
                         <span>Welcome, {{ Auth::user()->name }}!</span>
                     </div>
 
@@ -16,7 +20,7 @@
                                 <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                     Business
                                 </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" >
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <li><a class="dropdown-item" href="{{url('/kuwago-one')}}">Kuwago Cafe 1</a></li>
                                     <li><a class="dropdown-item" href="{{url('/kuwago-two')}}">Kuwago Cafe 2</a></li>
                                     <li><a class="dropdown-item" href="{{url('/uddesign')}}">Uddesign</a></li>
@@ -27,16 +31,21 @@
 
                     <div class="col-lg-4">
                         <div>
-                            <a href="{{url('/business')}}" class="mx-2"><i class="fa-solid fa-store"></i></a>
-                            <a href="{{url('/account')}}" class="mx-2"><i class="fa-solid fa-user"></i></a>
-                            <a href="{{ route('settings.account-show', ['id' => Auth::user()->id]) }}" class="mx-2">
-                                <i class="fa-solid fa-gear"></i>
-                            </a>                            
+                            <!-- Link to the business page -->
+                            <a href="{{ route('business.index') }}" class="mx-2"><i class="fa-solid fa-store"></i></a>
+
+                            <!-- Link to the account page -->
+                            <a href="{{ route('account.index') }}" class="mx-2"><i class="fa-solid fa-user"></i></a>
+                            <a href="{{ route('targetSales.index') }}" class="mx-2"><i class="fa-solid fa-crosshairs"></i></a>
+                            <!-- Link to the settings page with user ID -->
+                            <a href="{{ route('settings.account-show', ['id' => Auth::user()->id]) }}" class="mx-2"><i class="fa-solid fa-gear"></i></a>
+
+                            <!-- Logout link -->
                             @if (Auth::check())
                             <a href="{{ route('logout') }}" class="mx-2" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
                             </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST">
                                 @csrf
                             </form>
                             @endif

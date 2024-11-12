@@ -4,13 +4,15 @@
     <div class="container text-center">
         <div class="row pt-5 pb-5">
             <div class="col-lg-2">
-                <a href="{{ url('/account') }}"><i class="fa-solid fa-arrow-left fa-xl"></i></a>
+                <a href="{{ route('account.show', ['account' => $user->id]) }}">
+                    <i class="fa-solid fa-arrow-left fa-xl"></i>
+                </a>
             </div>
             <div class="col-lg-8">
                 @if ($user->role == 'owner')
-                <h3 style="">Edit My Account</h3>
+                <h3>Edit My Account</h3>
                 @else
-                <h3 style="">Edit User Account</h3>
+                <h3>Edit User Account</h3>
                 @endif
             </div>
             <div class="col-lg-2"></div>
@@ -37,7 +39,6 @@
                             <div class="row">
                                 <div class="col-lg-4 pt-5 pb-5">
                                     <img src="{{ asset('user_images/' . $user->user_image) }}" alt="User Image" width="100">
-                                    {{-- <img src="https://via.placeholder.com/80" alt="User Image" class="user-image" /> --}}
                                     <div class="form-group mb-3">
                                         <label for="user_image">User Image</label>
                                         <input type="file" class="form-control" name="user_image" value="{{ $user->user_image }}">
