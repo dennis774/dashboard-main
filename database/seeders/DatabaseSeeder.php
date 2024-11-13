@@ -27,6 +27,6 @@ class DatabaseSeeder extends Seeder
         FakeData::factory()->Count(1000)->create();
         FakeDataThree::factory()->Count(1000)->create();
         FakeDataTwo::factory()->Count(1000)->create();
-        FakeDataMerch::factory()->Count(1000)->create();
+        // FakeDataMerch::factory()->Count(1000)->create();
     }
 }

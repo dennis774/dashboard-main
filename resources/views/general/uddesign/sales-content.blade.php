@@ -14,10 +14,22 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-6">
-                            <canvas id="myChart1" width="400" height="200"></canvas>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <h6>Total Sales</h6>
+                                        <p>₱{{ $totalSales }}</p>
+                                        <p>Print/Photo: ₱{{ $totalPrintSales }}</p>
+                                        <p>UdD Merch: ₱{{ $totalMerchSales }}</p>
+                                        <p>Closed Deals: ₱{{ $totalCustomSales }}</p>
+                                    </div>
+                                    <div class="col-lg-6">
+                                    <canvas id="myChart1" width="400" height="200"></canvas>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-lg-6">
-                            <p><i class="fa-solid fa-peso-sign"></i>P{{$totalSales}}</p>
                             <canvas id="myChart2" width="400" height="200"></canvas>
                         </div>
                         
@@ -60,11 +72,29 @@
                                     data: {
                                         labels: @json($chartdata->pluck('date')),
                                         datasets: [{
-                                            label: 'Sales',
-                                            data: @json($chartdata->pluck('sales')),
+                                            label: 'Print/Photo',
+                                            data: @json($chartdata->pluck('print_sales')),
+                                            // backgroundColor: 'green',
+                                            borderColor: 'blue',
+                                            borderWidth: 1,
+                                            fill: 'origin'
+
+                                            
+                                        },{
+                                            label: 'UdD Merch',
+                                            data: @json($chartdata->pluck('merch_sales')),
                                             // backgroundColor: 'green',
                                             borderColor: 'green',
-                                            borderWidth: 5,
+                                            borderWidth: 1,
+                                            fill: 'origin'
+
+                                            
+                                        },{
+                                            label: 'Custom Deals',
+                                            data: @json($chartdata->pluck('custom_sales')),
+                                            // backgroundColor: 'green',
+                                            borderColor: 'yellow',
+                                            borderWidth: 1,
                                             fill: 'origin'
 
                                             

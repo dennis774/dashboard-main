@@ -11,105 +11,119 @@ use App\Models\FakeDataMerch;
 class UddesignController extends Controller
 {
     // for /uddesign
-    // public function general_uddesign(Request $request)
-    // {
-    //     $interval = $request->input('interval', 'thisweek');
-    //     $dates = $this->getDateRange($interval, $request);
+    public function general_uddesign(Request $request)
+    {
+        // Retrieve the interval from the request, default to 'thisweek'
+        $interval = $request->input('interval', 'thisweek');
+        
+        // Get the date range based on the interval
+        $dates = $this->getDateRange($interval, $request);
 
-    //     $chartdata = FakeDataThree::whereBetween('date', [$dates['start'], $dates['end']])
-    //         ->selectRaw(
-    //             '
-    //             ' .
-    //                 ($interval === 'overall' ? 'YEAR(date)' : ($interval === 'thisyear' || $interval === 'lastyear' ? 'DATE_FORMAT(date, "%Y-%m")' : 'date')) .
-    //                 ' as period,
-    //             SUM(sales) as sales, SUM(expenses) as expenses, SUM(orders) as orders
-    //         '
-    //         )
-    //         ->groupBy('period')
-    //         ->get()
-    //         ->map(function ($item) use ($interval) {
-    //             $item->orders = $item->orders;
-    //             $item->date = $this->formatDate($interval, $item->period);
-    //             $item->profit = $item->sales - $item->expenses;
-    //             return $item;
-    //         });
+        // Query and aggregate data
+        $chartdata = FakeDataThree::whereBetween('date', [$dates['start'], $dates['end']])
+            ->selectRaw(
+                '
+                ' .
+                    ($interval === 'overall' ? 'YEAR(date)' : ($interval === 'thisyear' || $interval === 'lastyear' ? 'DATE_FORMAT(date, "%Y-%m")' : 'date')) .
+                    ' as period,
+                SUM(total_sales) as total_sales, SUM(print_sales) as print_sales, SUM(merch_sales) as merch_sales, SUM(custom_sales) as custom_sales,
+                SUM(total_expenses) as total_expenses, SUM(print_expenses) as print_expenses, SUM(merch_expenses) as merch_expenses, SUM(custom_expenses) as custom_expenses
+            '
+            )
+            ->groupBy('period')
+            ->get()
+            ->map(function ($item) use ($interval) {
+                $item->date = $this->formatDate($interval, $item->period);
+                $item->total_profit = $item->total_sales - $item->total_expenses;
+                $item->print_profit = $item->print_sales - $item->print_expenses;
+                $item->merch_profit = $item->merch_sales - $item->merch_expenses;
+                $item->custom_profit = $item->custom_sales - $item->custom_expenses;
+                return $item;
+            });
 
-    //     $merchData = FakeDataMerch::whereBetween('date', [$dates['start'], $dates['end']])
-    //     ->selectRaw(
-    //         '
-    //         ' .
-    //             ($interval === 'overall' ? 'YEAR(date)' : ($interval === 'thisyear' || $interval === 'lastyear' ? 'DATE_FORMAT(date, "%Y-%m")' : 'date')) .
-    //             ' as period,
-    //         SUM(sales) as sales, SUM(expenses) as expenses, SUM(orders) as orders
-    //     '
-    //     )
-    //     ->groupBy('period')
-    //     ->get()
-    //     ->map(function ($item) use ($interval) {
-    //         $item->orders = $item->orders;
-    //         $item->date = $this->formatDate($interval, $item->period);
-    //         $item->profit = $item->sales - $item->expenses;
-    //         return $item;
-    //     });
+        // Calculate totals
+        $totalPrintSales = $chartdata->sum('print_sales');
+        $totalPrintProfit = $chartdata->sum('print_profit');
+        $totalPrintExpenses = $chartdata->sum('print_expenses');
 
-    //     $totalPrintSales = $chartdata->sum('sales');
-    //     $totalPrintProfit = $chartdata->sum('profit');
-    //     $totalPrintExpenses = $chartdata->sum('expenses');
-    //     $totalPrintOrders = $chartdata->sum('orders');
+        $totalMerchSales = $chartdata->sum('merch_sales');
+        $totalMerchProfit = $chartdata->sum('merch_profit');
+        $totalMerchExpenses = $chartdata->sum('merch_expenses');
 
-    //     $totalMerchSales = $merchData->sum('sales');
-    //     $totalMerchProfit = $merchData->sum('profit');
-    //     $totalMerchExpenses = $merchData->sum('expenses');
-    //     $totalMerchOrders = $merchData->sum('orders');
+        $totalCustomSales = $chartdata->sum('custom_sales');
+        $totalCustomProfit = $chartdata->sum('custom_profit');
+        $totalCustomExpenses = $chartdata->sum('custom_expenses');
 
-    //     $totalSales = $totalMerchSales + $totalPrintSales;
-    //     $totalProfit = $totalMerchProfit + $totalPrintProfit;
-    //     $totalExpenses = $totalMerchExpenses + $totalPrintExpenses;
-    //     $totalOrders = $totalMerchOrders + $totalPrintOrders;
+        $totalSales = $chartdata->sum('total_sales');
+        $totalProfit = $chartdata->sum('total_profit');
+        $totalExpenses = $chartdata->sum('total_expenses');
 
-    //     $actionRoute = route('general.uddesign.dashboard');
-    //     $totals = compact('totalSales', 'totalProfit', 'totalExpenses', 'totalOrders');
-    //     $print = compact('totalPrintSales', 'totalPrintProfit', 'totalPrintExpenses', 'totalPrintOrders');
-    //     $merch = compact('totalMerchSales', 'totalMerchProfit', 'totalMerchExpenses', 'totalMerchOrders');
+        // Prepare data for the view
+        $actionRoute = route('general.uddesign.dashboard');
+        $totals = compact('totalSales', 'totalProfit', 'totalExpenses');
+        $print = compact('totalPrintSales', 'totalPrintProfit', 'totalPrintExpenses');
+        $merch = compact('totalMerchSales', 'totalMerchProfit', 'totalMerchExpenses');
+        $custom = compact('totalCustomSales', 'totalCustomProfit', 'totalCustomExpenses');
 
-    //     return view('general.uddesign.dashboard', array_merge(
-    //         compact('actionRoute', 'chartdata', 'merchData'), 
-    //         $totals,
-    //         $print, 
-    //         $merch 
-    //     ));
-    // }
+        // Return the view with the data
+        return view('general.uddesign.dashboard', array_merge(
+            compact('actionRoute', 'chartdata'), 
+            $totals,
+            $print, 
+            $merch, 
+            $custom
+        ));
+    }
+    
     // for /uddesign/sales
     public function chart_sales_uddesign(Request $request)
     {
+        // Retrieve the interval from the request, default to 'thisweek'
         $interval = $request->input('interval', 'thisweek');
+        
+        // Get the date range based on the interval
         $dates = $this->getDateRange($interval, $request);
 
+        // Query and aggregate data
         $chartdata = FakeDataThree::whereBetween('date', [$dates['start'], $dates['end']])
             ->selectRaw(
                 '
                     ' .
                     ($interval === 'overall' ? 'YEAR(date)' : ($interval === 'thisyear' || $interval === 'lastyear' ? 'DATE_FORMAT(date, "%Y-%m")' : 'date')) .
                     ' as period,
-                    SUM(sales) as sales, SUM(gcash) as gcash, SUM(cash) as cash
+                    SUM(total_sales) as total_sales, SUM(print_sales) as print_sales, SUM(merch_sales) as merch_sales, SUM(custom_sales) as custom_sales,
+                    SUM(gcash) as gcash, SUM(cash) as cash
                 '
             )
             ->groupBy('period')
             ->get()
             ->map(function ($item) use ($interval) {
                 $item->date = $this->formatDate($interval, $item->period);
-                $item->sales = $item->sales;
+                $item->total_sales = $item->total_sales;
+                $item->print_sales = $item->print_sales;
+                $item->merch_sales = $item->merch_sales;
+                $item->custom_sales = $item->custom_sales;
                 $item->gcash = $item->gcash;
                 $item->cash = $item->cash;
                 return $item;
             });
 
+        // Prepare the action route for the view
         $actionRoute = route('general.uddesign.sales');
-        $totalSales = $chartdata->sum('sales');
+        
+        // Calculate totals
+        $totalSales = $chartdata->sum('total_sales');
+        $totalPrintSales = $chartdata->sum('print_sales');
+        $totalMerchSales = $chartdata->sum('merch_sales');
+        $totalCustomSales = $chartdata->sum('custom_sales');
         $totalGcash = $chartdata->sum('gcash');
         $totalCash = $chartdata->sum('cash');
-        return view('general.uddesign.sales', compact('chartdata', 'totalSales', 'totalGcash', 'totalCash', 'actionRoute'));
+        
+        // Return the view with the data
+        return view('general.uddesign.sales', compact('chartdata', 'totalSales', 'totalPrintSales', 'totalMerchSales', 'totalCustomSales', 'totalGcash', 'totalCash', 'actionRoute'));
     }
+
+
     // for /uddesign/expenses
     public function chart_expenses_uddesign(Request $request)
     {
@@ -122,23 +136,30 @@ class UddesignController extends Controller
                     ' .
                     ($interval === 'overall' ? 'YEAR(date)' : ($interval === 'thisyear' || $interval === 'lastyear' ? 'DATE_FORMAT(date, "%Y-%m")' : 'date')) .
                     ' as period,
-                    SUM(expenses) as expenses
+                    SUM(total_expenses) as total_expenses, SUM(print_expenses) as print_expenses, SUM(merch_expenses) as merch_expenses, SUM(custom_expenses) as custom_expenses
                 '
             )
             ->groupBy('period')
             ->get()
             ->map(function ($item) use ($interval) {
                 $item->date = $this->formatDate($interval, $item->period);
-                $item->expenses = $item->expenses;
+                $item->total_expenses = $item->total_expenses;
+                $item->print_expenses = $item->print_expenses;
+                $item->merch_expenses = $item->merch_expenses;
+                $item->custom_expenses = $item->custom_expenses;
                 return $item;
             });
 
         $actionRoute = route('general.uddesign.expenses');
-        $totalExpenses = $chartdata->sum('expenses');
+        $totalExpenses = $chartdata->sum('total_expenses');
+        $totalPrintExpenses = $chartdata->sum('print_expenses');
+        $totalMerchExpenses = $chartdata->sum('merch_expenses');
+        $totalCustomExpenses = $chartdata->sum('custom_expenses');
 
-        return view('general.uddesign.expenses', compact('actionRoute', 'chartdata', 'totalExpenses'));
+        return view('general.uddesign.expenses', compact('actionRoute', 'chartdata', 'totalExpenses', 'totalPrintExpenses', 'totalMerchExpenses', 'totalCustomExpenses'));
     }
-    // for This method changes the format of the date for display purposes, ensuring the date is presented correctly based on the interval.
+
+    // This method changes the format of the date for display purposes, ensuring the date is presented correctly based on the interval.
     private function formatDate($interval, $period)
     {
         if ($interval === 'overall') {
@@ -155,6 +176,7 @@ class UddesignController extends Controller
 
         return Carbon::parse($period)->toDateString();
     }
+
     //This method filters the data by providing the start and end dates based on the selected interval.
     private function getDateRange($interval, $request)
     {
@@ -229,64 +251,5 @@ class UddesignController extends Controller
                 return ['start' => Carbon::parse($request->input('start_date')), 'end' => Carbon::parse($request->input('end_date'))];
         }
     }
-
-
-    public function general_uddesign(Request $request)
-{
-    $interval = $request->input('interval', 'thisweek');
-    $dates = $this->getDateRange($interval, $request);
-
-    $chartdata = $this->getData(FakeDataThree::class, $interval, $dates);
-    $merchData = $this->getData(FakeDataMerch::class, $interval, $dates);
-
-    $totalPrintSales = $chartdata->sum('sales');
-    $totalPrintProfit = $chartdata->sum('profit');
-    $totalPrintExpenses = $chartdata->sum('expenses');
-
-    $totalMerchSales = $merchData->sum('sales');
-    $totalMerchProfit = $merchData->sum('profit');
-    $totalMerchExpenses = $merchData->sum('expenses');
-
-    $totalSales = $totalMerchSales + $totalPrintSales;
-    $totalProfit = $totalMerchProfit + $totalPrintProfit;
-    $totalExpenses = $totalMerchExpenses + $totalPrintExpenses;
-
-    $actionRoute = route('general.uddesign.dashboard');
-    $totals = compact('totalSales', 'totalProfit', 'totalExpenses');
-    $print = compact('totalPrintSales', 'totalPrintProfit', 'totalPrintExpenses');
-    $merch = compact('totalMerchSales', 'totalMerchProfit', 'totalMerchExpenses');
-
-    return view('general.uddesign.dashboard', array_merge(
-        compact('actionRoute', 'chartdata', 'merchData'), 
-        $totals,
-        $print, 
-        $merch 
-    ));
-}
-
-private function getData($model, $interval, $dates)
-{
-    return $model::whereBetween('date', [$dates['start'], $dates['end']])
-        ->selectRaw($this->getSelectRawQuery($interval))
-        ->groupBy('period')
-        ->get()
-        ->map(function ($item) use ($interval) {
-            $item->orders = $item->orders;
-            $item->date = $this->formatDate($interval, $item->period);
-            $item->profit = $item->sales - $item->expenses;
-            return $item;
-        });
-}
-
-private function getSelectRawQuery($interval)
-{
-    $dateFormat = $interval === 'overall' ? 'YEAR(date)' :
-        ($interval === 'thisyear' || $interval === 'lastyear' ? 'DATE_FORMAT(date, "%Y-%m")' : 'date');
-    
-    return "
-        $dateFormat as period,
-        SUM(sales) as sales, SUM(expenses) as expenses
-    ";
-}
 
 }

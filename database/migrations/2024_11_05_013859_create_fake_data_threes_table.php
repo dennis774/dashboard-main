@@ -13,11 +13,16 @@ return new class extends Migration
     {
         Schema::create('fake_data_threes', function (Blueprint $table) {
             $table->id();
-            $table->float('orders');
-            $table->float('expenses');
             $table->float('cash');
             $table->float('gcash');
-            $table->float('sales');
+            $table->float('print_sales');
+            $table->float('merch_sales');
+            $table->float('custom_sales');
+            $table->float('total_sales');
+            $table->float('print_expenses');
+            $table->float('merch_expenses');
+            $table->float('custom_expenses');
+            $table->float('total_expenses');
             $table->date('date');
             $table->timestamps();
         });

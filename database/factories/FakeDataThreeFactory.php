@@ -17,12 +17,17 @@ class FakeDataThreeFactory extends Factory
     public function definition(): array
     {
         return [
-            'orders' => $orders = fake()->numberBetween(10, 50),
-            'cash' => $cash = fake()->numberBetween(2500, 5000),
-            'gcash' => $gcash = fake()->numberBetween(2500, 5000),
-            'sales' => $cash + $gcash,
-            'expenses' => fake()->numberBetween(1000, 5000),
-            'date' => fake()->dateTimeBetween('2024-01-01', '2024-11-30')->format('Y-m-d')
+            'print_sales' => $printSales = fake()->numberBetween(2500, 5000),
+            'merch_sales' => $merchSales = fake()->numberBetween(2500, 5000),
+            'custom_sales' => $customSales = fake()->numberBetween(2500, 5000),
+            'total_sales' => $totalSales = $printSales + $merchSales + $customSales,
+            'cash' => $cash = fake()->numberBetween(0.5 * $totalSales, 0.8 * $totalSales), // 50%-80% of total sales
+            'gcash' => $gcash = $totalSales - $cash,
+            'print_expenses' => $printExpenses = fake()->numberBetween(1000, 5000),
+            'merch_expenses' => $merchExpenses = fake()->numberBetween(1000, 5000),
+            'custom_expenses' => $customExpenses = fake()->numberBetween(1000, 5000),
+            'total_expenses' => $printExpenses + $merchExpenses + $customExpenses,
+            'date' => fake()->dateTimeBetween('2023-01-01', '2024-12-30')->format('Y-m-d')
         ];
     }
 }

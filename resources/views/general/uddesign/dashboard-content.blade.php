@@ -5,7 +5,7 @@
         <div class="col-lg-1">
             <div class="container">
                 <div class="row">
-                    @include('general.kuwago-one.sidebar')
+                    @include('general.uddesign.sidebar')
                 </div>
             </div>
         </div>
@@ -25,8 +25,9 @@
                                                 <p>₱{{ $totalSales }}</p>
                                             </div>
                                             <div class="col-lg-6">
-                                                <p>Print: ₱{{$totalPrintSales}}</p>
-                                                <p>Merch: ₱{{$totalMerchSales}}</p>
+                                                <p>Print/Photo: ₱{{$totalPrintSales}}</p>
+                                                <p>UdD Merch: ₱{{$totalMerchSales}}</p>
+                                                <p>Custom Deals: ₱{{$totalCustomSales}}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -40,8 +41,9 @@
                                                 <p>₱{{ $totalProfit }}</p>
                                             </div>
                                             <div class="col-lg-6">
-                                                <p>Print: ₱{{$totalPrintProfit}}</p>
-                                                <p>Merch: ₱{{$totalMerchProfit}}</p>
+                                                <p>Print/Photo: ₱{{$totalPrintProfit}}</p>
+                                                <p>UdD Merch: ₱{{$totalMerchProfit}}</p>
+                                                <p>Custom Deals: ₱{{$totalCustomProfit}}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -55,8 +57,9 @@
                                                 <p>₱{{ $totalExpenses }}</p>
                                             </div>
                                             <div class="col-lg-6">
-                                                <p>Print: ₱{{$totalPrintExpenses}}</p>
-                                                <p>Merch: ₱{{$totalMerchExpenses}}</p>
+                                                <p>Print/Photo: ₱{{$totalPrintExpenses}}</p>
+                                                <p>UdD Merch: ₱{{$totalMerchExpenses}}</p>
+                                                <p>Custom Deals: ₱{{$totalCustomExpenses}}</p>
                                             </div>
                                         </div>
                                     </div>

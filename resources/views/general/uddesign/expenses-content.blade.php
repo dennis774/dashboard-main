@@ -26,11 +26,29 @@
                                     data: {
                                         labels: @json($chartdata->pluck('date')),
                                         datasets: [{
-                                            label: 'Expenses',
-                                            data: @json($chartdata->pluck('expenses')),
+                                            label: 'Print/Photo',
+                                            data: @json($chartdata->pluck('print_expenses')),
+                                            // backgroundColor: 'green',
+                                            borderColor: 'blue',
+                                            borderWidth: 1,
+                                            fill: 'origin'
+
+                                            
+                                        },{
+                                            label: 'UdD Merch',
+                                            data: @json($chartdata->pluck('merch_expenses')),
                                             // backgroundColor: 'green',
                                             borderColor: 'green',
-                                            borderWidth: 5,
+                                            borderWidth: 1,
+                                            fill: 'origin'
+
+                                            
+                                        },{
+                                            label: 'Custom Deals',
+                                            data: @json($chartdata->pluck('custom_expenses')),
+                                            // backgroundColor: 'green',
+                                            borderColor: 'yellow',
+                                            borderWidth: 1,
                                             fill: 'origin'
 
                                             
